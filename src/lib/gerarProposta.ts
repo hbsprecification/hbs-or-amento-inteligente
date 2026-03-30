@@ -1,18 +1,19 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { EtapaServico, calcularCustoEtapa, calcularPrecoFinal, formatBRL } from "@/lib/orcamento";
+import { EtapaServico, calcularCustoEtapa, calcularPrecoFinal, formatBRL, GRUPOS } from "@/lib/orcamento";
 
 export async function gerarPropostaPDF(
   etapas: EtapaServico[],
-  custoHoraTotal: number,
-  markup: number,
+  custoHora: number,
+  lucro: number,
   impostos: number,
+  comissao: number,
   nomeCliente: string
 ) {
   const doc = new jsPDF();
   const ativas = etapas.filter(e => e.ativa);
-  const custoExecucao = ativas.reduce((s, e) => s + calcularCustoEtapa(e, custoHoraTotal), 0);
-  const { precoVenda } = calcularPrecoFinal(custoExecucao, markup, impostos);
+  const custoExecucao = ativas.reduce((s, e) => s + calcularCustoEtapa(e, custoHora), 0);
+  const resultado = calcularPrecoFinal(custoExecucao, lucro, impostos, comissao);
 
   // Load logo
   let logoImg: string | null = null;
@@ -28,16 +29,15 @@ export async function gerarPropostaPDF(
 
   // Header
   if (logoImg) {
-    doc.addImage(logoImg, "PNG", 15, 10, 25, 25);
+    doc.addImage(logoImg, "PNG", 15, 8, 30, 30);
   }
   doc.setFontSize(20);
   doc.setFont("helvetica", "bold");
-  doc.text("PROPOSTA DE SERVIÇO", 50, 25);
+  doc.text("PROPOSTA DE SERVIÇO", 55, 22);
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text("HBS Engenharia", 50, 32);
+  doc.text("HBS Engenharia - Soluções em Engenharia", 55, 29);
 
-  // Client info
   doc.setDrawColor(40, 180, 120);
   doc.setLineWidth(0.5);
   doc.line(15, 42, 195, 42);
@@ -45,28 +45,44 @@ export async function gerarPropostaPDF(
   doc.setFontSize(11);
   doc.text(`Cliente: ${nomeCliente || 'A definir'}`, 15, 52);
   doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 15, 58);
+  doc.text(`Validade: 30 dias`, 120, 58);
 
-  // Services table
-  const tableBody = ativas.map(e => [
-    e.nome,
-    `${e.horasEstimadas + e.visitasEstimadas * 8}h`,
-  ]);
+  // Group services by grupo
+  let currentY = 68;
 
-  autoTable(doc, {
-    startY: 65,
-    head: [["Serviço", "Horas Previstas"]],
-    body: tableBody,
-    theme: "grid",
-    headStyles: { fillColor: [20, 90, 70], textColor: 255 },
-    styles: { fontSize: 10 },
-  });
+  for (const grupo of GRUPOS) {
+    const etapasGrupo = ativas.filter(e => e.grupo === grupo);
+    if (etapasGrupo.length === 0) continue;
 
-  const finalY = (doc as any).lastAutoTable.finalY + 15;
+    const tableBody = etapasGrupo.map(e => [
+      e.nome,
+      `${e.visitas}`,
+      `${e.horas + e.visitas * 8}h`,
+    ]);
+
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "bold");
+    doc.text(grupo, 15, currentY);
+    currentY += 3;
+
+    autoTable(doc, {
+      startY: currentY,
+      head: [["Serviço", "Visitas", "Horas Previstas"]],
+      body: tableBody,
+      theme: "grid",
+      headStyles: { fillColor: [20, 50, 60], textColor: 255, fontSize: 9 },
+      styles: { fontSize: 9 },
+      margin: { left: 15, right: 15 },
+    });
+
+    currentY = (doc as any).lastAutoTable.finalY + 8;
+  }
 
   // Total
+  const finalY = currentY + 5;
   doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
-  doc.text(`VALOR TOTAL: ${formatBRL(precoVenda)}`, 15, finalY);
+  doc.text(`VALOR TOTAL: ${formatBRL(resultado.precoVenda)}`, 15, finalY);
 
   // Payment
   doc.setFontSize(10);
@@ -77,7 +93,7 @@ export async function gerarPropostaPDF(
 
   doc.setFontSize(8);
   doc.setTextColor(120);
-  doc.text("Proposta válida por 30 dias. | HBS Engenharia", 15, 280);
+  doc.text("Proposta válida por 30 dias. | HBS Engenharia - Soluções em Engenharia", 15, 280);
 
   doc.save(`proposta-hbs-${Date.now()}.pdf`);
 }
