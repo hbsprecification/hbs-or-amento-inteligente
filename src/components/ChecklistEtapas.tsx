@@ -32,39 +32,39 @@ export default function ChecklistEtapas({ etapas, custoHora, onUpdate }: Props) 
                 return (
                   <div
                     key={etapa.id}
-                    className={`rounded-md border transition-all ${
-                      etapa.ativa ? 'bg-card border-primary/20' : 'bg-card/30 border-border/10 opacity-40'
+                    className={`rounded-xl border transition-all duration-300 ${
+                      etapa.ativa 
+                        ? 'bg-card border-primary/30 shadow-[0_0_15px_rgba(var(--primary),0.05)]' 
+                        : 'bg-white/[0.02] border-white/5 opacity-40 hover:opacity-60'
                     }`}
                   >
-                    <div className="flex items-center gap-1.5 px-2 py-1.5">
+                    <div className="flex items-center gap-3 px-3 py-2.5">
                       <Checkbox
                         checked={etapa.ativa}
                         onCheckedChange={c => {
                           const patch: Partial<EtapaServico> = { ativa: !!c };
                           if (!!c && etapa.visitas === 0 && etapa.horas === 0) {
-                            // Se for Categoria 1 (Projeto Paramétrico), já sugere 1 visita (8h)
-                            // Na Categoria 3 (Despachante), também foca em visitas.
                             patch.visitas = 1;
                           }
                           update(etapa.id, patch);
                         }}
-                        className="h-3.5 w-3.5 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                        className="h-4 w-4 rounded-md border-border transition-colors data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                       />
-                      <span className="flex-1 text-[11px] font-medium text-foreground truncate">{etapa.nome}</span>
+                      <span className="flex-1 text-[12px] font-semibold text-foreground/90 tracking-tight">{etapa.nome}</span>
 
                       {etapa.ativa && (
-                        <>
+                        <div className="flex items-center gap-2">
                           {custo > 0 && !isEditing && (
                             <button onClick={() => setEditingId(etapa.id)}
-                              className="text-[10px] font-bold text-primary hover:underline shrink-0">
+                              className="text-[11px] font-black text-primary hover:brightness-125 transition-all bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10">
                               {formatBRL(custo)}
                             </button>
                           )}
                           <button onClick={() => setEditingId(isEditing ? null : etapa.id)}
-                            className={`p-0.5 rounded shrink-0 ${isEditing ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground'}`}>
-                            <Pencil className="w-2.5 h-2.5" />
+                            className={`p-1 rounded-lg transition-colors ${isEditing ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-white/5'}`}>
+                            <Pencil className="w-3 h-3" />
                           </button>
-                        </>
+                        </div>
                       )}
                     </div>
 

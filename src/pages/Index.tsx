@@ -45,16 +45,18 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background pb-32">
-      <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="max-w-5xl mx-auto px-3 py-2 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <img src="/logo-hbs.png" alt="HBS" className="w-8 h-8 object-contain" />
+      <header className="glass-header shadow-sm">
+        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-1.5 bg-primary/10 rounded-xl border border-primary/20">
+              <img src="/logo-hbs.png" alt="HBS" className="w-7 h-7 object-contain" />
+            </div>
             <div>
-              <h1 className="text-sm font-bold text-foreground leading-none">HBS Orçamentos</h1>
-              <p className="text-[10px] text-muted-foreground">Precificação</p>
+              <h1 className="text-sm font-bold text-foreground leading-none tracking-tight uppercase">HBS Orçamentos</h1>
+              <p className="text-[9px] text-muted-foreground font-medium">Arquitetura & Engenharia</p>
             </div>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <ConfiguracoesModal config={config} onSave={setConfig} />
             <GerarPropostaModal
               etapas={etapas} custoHora={custoHora}
@@ -67,9 +69,12 @@ export default function Index() {
 
       <main className="max-w-5xl mx-auto px-3 py-3 space-y-3">
         {/* Custo/hora */}
-        <div className="flex items-center justify-between glass-card px-3 py-2">
-          <span className="text-[10px] text-muted-foreground uppercase tracking-wide">Custo Hora</span>
-          <span className="text-base font-extrabold text-gradient">{formatBRL(custoHora)}/h</span>
+        <div className="flex items-center justify-between glass-card px-4 py-3">
+          <div>
+            <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">Custo Hora Técnica</span>
+            <p className="text-[10px] text-muted-foreground/60 leading-none">Baseado em custos operacionais</p>
+          </div>
+          <span className="text-xl font-black text-gradient">{formatBRL(custoHora)}<span className="text-xs text-muted-foreground">/h</span></span>
         </div>
 
         {/* Protocolos toggles */}
