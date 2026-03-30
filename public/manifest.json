@@ -1,0 +1,17 @@
+{
+  "name": "HBS Orçamentos",
+  "short_name": "HBS Orçamentos",
+  "description": "Preparação de Orçamentos e Precificação de Serviços de Engenharia",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#0f1729",
+  "background_color": "#0a0e1a",
+  "icons": [
+    {
+      "src": "/logo-hbs.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
