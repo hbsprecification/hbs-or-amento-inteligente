@@ -42,6 +42,8 @@ export default function ChecklistEtapas({ etapas, custoHora, onUpdate }: Props) 
                         onCheckedChange={c => {
                           const patch: Partial<EtapaServico> = { ativa: !!c };
                           if (!!c && etapa.visitas === 0 && etapa.horas === 0) {
+                            // Se for Categoria 1 (Projeto Paramétrico), já sugere 1 visita (8h)
+                            // Na Categoria 3 (Despachante), também foca em visitas.
                             patch.visitas = 1;
                           }
                           update(etapa.id, patch);

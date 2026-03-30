@@ -8,26 +8,33 @@ export interface EtapaServico {
 }
 
 export const GRUPOS = [
-  'Atividades Iniciais',
-  'Elaboração de Projeto',
-  'Documentação e Regularização',
+  'CATEGORIA 1: PROJETO PARAMÉTRICO (PREFEITURA)',
+  'CATEGORIA 2: REGULARIZAÇÃO FINAL E DOCUMENTOS',
+  'CATEGORIA 3: SERVIÇOS DE DESPACHANTE E TRAMITAÇÃO',
 ];
 
 export const ETAPAS_PADRAO: Omit<EtapaServico, 'ativa' | 'visitas' | 'horas'>[] = [
-  { id: 'reuniao', nome: 'Reunião Inicial', grupo: GRUPOS[0] },
-  { id: 'visita-levantamento', nome: 'Visita Técnica e Levantamento', grupo: GRUPOS[0] },
-  { id: 'esboco', nome: 'Estudo Preliminar', grupo: GRUPOS[0] },
-  { id: 'levantamento-normas', nome: 'Levantamento de Normas', grupo: GRUPOS[0] },
-  { id: 'planta-baixa', nome: 'Projeto Arquitetônico', grupo: GRUPOS[1] },
-  { id: 'elevacoes', nome: 'Cortes e Fachadas', grupo: GRUPOS[1] },
-  { id: 'planta-situacao', nome: 'Planta de Situação / Cobertura', grupo: GRUPOS[1] },
-  { id: 'calculos', nome: 'Cálculos para Aprovação', grupo: GRUPOS[1] },
-  { id: 'pranchas', nome: 'Pranchas para Impressão', grupo: GRUPOS[1] },
-  { id: 'memorial-descritivo', nome: 'Memorial Descritivo', grupo: GRUPOS[2] },
-  { id: 'memorial-normas', nome: 'Memorial de Normas', grupo: GRUPOS[2] },
-  { id: 'memorial-fracao', nome: 'Memorial com Fração Ideal', grupo: GRUPOS[2] },
-  { id: 'convencao-condominio', nome: 'Convenção de Condomínio', grupo: GRUPOS[2] },
-  { id: 'quadro-areas', nome: 'Quadro de Áreas NBR 12721', grupo: GRUPOS[2] },
+  // CATEGORIA 1
+  { id: 'arq', nome: 'Projeto Arquitetônico', grupo: GRUPOS[0] },
+  { id: 'corte-fachada', nome: 'Corte e Fachada', grupo: GRUPOS[0] },
+  { id: 'situacao', nome: 'Planta de Situação', grupo: GRUPOS[0] },
+  { id: 'calculos', nome: 'Cálculo para Aprovação', grupo: GRUPOS[0] },
+  { id: 'pranchas', nome: 'Pranchas para Impressão', grupo: GRUPOS[0] },
+
+  // CATEGORIA 2
+  { id: 'memorial-desc', nome: 'Memorial Descritivo', grupo: GRUPOS[1] },
+  { id: 'memorial-normas', nome: 'Memorial de Normas', grupo: GRUPOS[1] },
+  { id: 'memorial-fracao', nome: 'Memorial com Fração Ideal', grupo: GRUPOS[1] },
+  { id: 'convencao', nome: 'Convenção de Condomínio', grupo: GRUPOS[1] },
+  { id: 'quadro-areas', nome: 'Quadro de Áreas NBR 12721', grupo: GRUPOS[1] },
+  { id: 'habite-se', nome: 'Habite-se', grupo: GRUPOS[1] },
+  { id: 'certidao-area', nome: 'Certidão de Área Construída', grupo: GRUPOS[1] },
+
+  // CATEGORIA 3
+  { id: 'proto-pref', nome: 'Protocolo e Acompanhamento Prefeitura', grupo: GRUPOS[2] },
+  { id: 'proto-cartorio', nome: 'Protocolo e Acompanhamento Cartório', grupo: GRUPOS[2] },
+  { id: 'retirada-cert', nome: 'Retirada de Certidões', grupo: GRUPOS[2] },
+  { id: 'idas-orgaos', nome: 'Idas a Órgãos Públicos', grupo: GRUPOS[2] },
 ];
 
 // Custos fixos de protocolo (valores padrão)
