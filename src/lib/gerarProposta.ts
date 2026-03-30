@@ -9,7 +9,8 @@ export async function gerarPropostaPDF(
   impostos: number,
   comissao: number,
   nomeCliente: string,
-  localObra?: string
+  localObra?: string,
+  prazo?: number
 ) {
   const doc = new jsPDF();
   const ativas = etapas.filter(e => e.ativa);
@@ -37,24 +38,27 @@ export async function gerarPropostaPDF(
   doc.text("PROPOSTA DE SERVIÇO", 55, 22);
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text("HBS Engenharia - Soluções em Engenharia", 55, 29);
+  doc.text("HBS Soluções em Engenharia", 55, 29);
 
   doc.setDrawColor(40, 180, 120);
   doc.setLineWidth(0.5);
   doc.line(15, 42, 195, 42);
 
+  let infoY = 52;
   doc.setFontSize(11);
-  doc.text(`Cliente: ${nomeCliente || 'A definir'}`, 15, 52);
+  doc.text(`Cliente: ${nomeCliente || 'A definir'}`, 15, infoY);
+  infoY += 6;
   if (localObra) {
-    doc.text(`Local: ${localObra}`, 15, 58);
-    doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 15, 64);
-  } else {
-    doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 15, 58);
+    doc.text(`Local: ${localObra}`, 15, infoY);
+    infoY += 6;
   }
-  doc.text(`Validade: 30 dias`, 120, 58);
+  doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 15, infoY);
+  if (prazo) {
+    doc.text(`Prazo: ${prazo} dias`, 120, infoY);
+  }
+  doc.text(`Validade: 30 dias`, 120, infoY - 6);
 
-  // Group services by grupo
-  let currentY = 68;
+  let currentY = infoY + 10;
 
   for (const grupo of GRUPOS) {
     const etapasGrupo = ativas.filter(e => e.grupo === grupo);
@@ -90,16 +94,25 @@ export async function gerarPropostaPDF(
   doc.setFont("helvetica", "bold");
   doc.text(`VALOR TOTAL: ${formatBRL(resultado.precoVenda)}`, 15, finalY);
 
+  if (resultado.comissao > 0) {
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100);
+    doc.text(`(Inclui comissão de parceiro: ${formatBRL(resultado.comissao)})`, 15, finalY + 6);
+    doc.setTextColor(0);
+  }
+
   // Payment
+  const payY = finalY + (resultado.comissao > 0 ? 14 : 10);
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text("Condições de Pagamento:", 15, finalY + 12);
-  doc.text("• 50% na assinatura do contrato (PIX)", 20, finalY + 19);
-  doc.text("• 50% na conclusão dos serviços (PIX)", 20, finalY + 25);
+  doc.text("Condições de Pagamento:", 15, payY);
+  doc.text("• 50% na assinatura do contrato (PIX)", 20, payY + 7);
+  doc.text("• 50% na conclusão dos serviços (PIX)", 20, payY + 13);
 
   doc.setFontSize(8);
   doc.setTextColor(120);
-  doc.text("Proposta válida por 30 dias. | HBS Engenharia - Soluções em Engenharia", 15, 280);
+  doc.text("Proposta válida por 30 dias. | HBS Soluções em Engenharia", 15, 280);
 
   doc.save(`proposta-hbs-${Date.now()}.pdf`);
 }
