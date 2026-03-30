@@ -7,7 +7,7 @@ import GerarPropostaModal from "@/components/GerarPropostaModal";
 import { Switch } from "@/components/ui/switch";
 import {
   EtapaServico, ETAPAS_PADRAO, calcularCustoHora, calcularCustoEtapa,
-  calcularTotalProtocolos, formatBRL,
+  calcularTotalProtocolos, formatBRL, calcularTotalHoras,
   type ProtocolosSelecionados,
 } from "@/lib/orcamento";
 
@@ -26,9 +26,11 @@ export default function Index() {
   const custoHora = calcularCustoHora(custoOperacional, config.horasProdutivas);
 
   const custoTecnico = useMemo(
-    () => etapas.filter(e => e.ativa).reduce((s, e) => s + calcularCustoEtapa(e, custoHora, config.protocolo.custoVisita), 0),
-    [etapas, custoHora, config.protocolo.custoVisita]
+    () => etapas.filter(e => e.ativa).reduce((s, e) => s + calcularCustoEtapa(e, custoHora), 0),
+    [etapas, custoHora]
   );
+
+  const totalHoras = useMemo(() => calcularTotalHoras(etapas), [etapas]);
 
   const custoProtocolos = calcularTotalProtocolos(protocolos, config.protocolo);
 
@@ -55,7 +57,7 @@ export default function Index() {
           <div className="flex items-center gap-1">
             <ConfiguracoesModal config={config} onSave={setConfig} />
             <GerarPropostaModal
-              etapas={etapas} custoHora={custoHora} custoVisita={config.protocolo.custoVisita}
+              etapas={etapas} custoHora={custoHora}
               protocolos={protocolos} custosProtocolo={config.protocolo}
               lucro={lucro} impostos={impostos} comissao={comissao}
             />
@@ -92,13 +94,14 @@ export default function Index() {
         {/* Etapas */}
         <div className="glass-card p-3">
           <h2 className="text-xs font-semibold text-foreground mb-2">Serviços Técnicos</h2>
-          <ChecklistEtapas etapas={etapas} custoHora={custoHora} custoVisita={config.protocolo.custoVisita} onUpdate={setEtapas} />
+          <ChecklistEtapas etapas={etapas} custoHora={custoHora} onUpdate={setEtapas} />
         </div>
       </main>
 
       <ResumoFixo
         custoTecnico={custoTecnico}
         custoProtocolos={custoProtocolos}
+        totalHoras={totalHoras}
         lucro={lucro} impostos={impostos} comissao={comissao}
         onLucroChange={setLucro} onImpostosChange={setImpostos} onComissaoChange={setComissao}
       />

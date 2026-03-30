@@ -8,7 +8,6 @@ import {
 export async function gerarPropostaPDF(
   etapas: EtapaServico[],
   custoHora: number,
-  custoVisita: number,
   protocolos: ProtocolosSelecionados,
   custosProtocolo: CustosProtocolo,
   lucro: number,
@@ -20,7 +19,7 @@ export async function gerarPropostaPDF(
 ) {
   const doc = new jsPDF();
   const ativas = etapas.filter(e => e.ativa);
-  const custoTecnico = ativas.reduce((s, e) => s + calcularCustoEtapa(e, custoHora, custoVisita), 0);
+  const custoTecnico = ativas.reduce((s, e) => s + calcularCustoEtapa(e, custoHora), 0);
   const custoProtocolos = calcularTotalProtocolos(protocolos, custosProtocolo);
   const resultado = calcularPrecoFinal(custoTecnico, custoProtocolos, lucro, impostos, comissao);
 
@@ -70,8 +69,8 @@ export async function gerarPropostaPDF(
 
     autoTable(doc, {
       startY: y,
-      head: [["Serviço", "Visitas", "Horas"]],
-      body: eg.map(e => [e.nome, `${e.visitas}`, `${e.horas}h`]),
+      head: [["Serviço", "Visitas (8h cada)", "H. Adicionais", "Total Dedicação"]],
+      body: eg.map(e => [e.nome, `${e.visitas}`, `${e.horas}h`, `${(e.visitas * 8) + e.horas}h`]),
       theme: "grid",
       headStyles: { fillColor: [20, 50, 60], textColor: 255, fontSize: 9 },
       styles: { fontSize: 9 },

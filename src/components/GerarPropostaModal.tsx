@@ -13,7 +13,6 @@ import { gerarPropostaPDF } from "@/lib/gerarProposta";
 interface Props {
   etapas: EtapaServico[];
   custoHora: number;
-  custoVisita: number;
   protocolos: ProtocolosSelecionados;
   custosProtocolo: CustosProtocolo;
   lucro: number;
@@ -21,7 +20,7 @@ interface Props {
   comissao: number;
 }
 
-export default function GerarPropostaModal({ etapas, custoHora, custoVisita, protocolos, custosProtocolo, lucro, impostos, comissao }: Props) {
+export default function GerarPropostaModal({ etapas, custoHora, protocolos, custosProtocolo, lucro, impostos, comissao }: Props) {
   const [open, setOpen] = useState(false);
   const [nomeCliente, setNomeCliente] = useState("");
   const [localObra, setLocalObra] = useState("");
@@ -30,7 +29,7 @@ export default function GerarPropostaModal({ etapas, custoHora, custoVisita, pro
   const ativas = etapas.filter(e => e.ativa).length;
 
   const handleGerar = () => {
-    gerarPropostaPDF(etapas, custoHora, custoVisita, protocolos, custosProtocolo, lucro, impostos, comissao, nomeCliente, localObra, prazo);
+    gerarPropostaPDF(etapas, custoHora, protocolos, custosProtocolo, lucro, impostos, comissao, nomeCliente, localObra, prazo);
     setOpen(false);
   };
 

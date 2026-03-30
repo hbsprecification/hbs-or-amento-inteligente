@@ -35,14 +35,12 @@ export interface CustosProtocolo {
   art: number;
   pasta: number;
   assinatura: number;
-  custoVisita: number; // custo por visita/deslocamento
 }
 
 export const CUSTOS_PROTOCOLO_PADRAO: CustosProtocolo = {
   art: 115,
   pasta: 50,
   assinatura: 80,
-  custoVisita: 150,
 };
 
 export interface ProtocolosSelecionados {
@@ -64,13 +62,18 @@ export function calcularCustoHora(custoOperacional: number, horasProdutivas: num
 
 export function calcularCustoEtapa(
   etapa: EtapaServico,
-  custoHora: number,
-  custoVisita: number
+  custoHora: number
 ): number {
   if (!etapa.ativa) return 0;
-  const custoHoras = etapa.horas * custoHora;
-  const custoVisitas = etapa.visitas * custoVisita;
-  return custoHoras + custoVisitas;
+  // Cada visita representa 8 horas de dedicação técnica (1 dia de trabalho)
+  const totalHoras = (etapa.visitas * 8) + etapa.horas;
+  return totalHoras * custoHora;
+}
+
+export function calcularTotalHoras(etapas: EtapaServico[]): number {
+  return etapas
+    .filter(e => e.ativa)
+    .reduce((acc, e) => acc + (e.visitas * 8) + e.horas, 0);
 }
 
 export function calcularTotalProtocolos(

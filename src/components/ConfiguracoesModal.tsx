@@ -110,11 +110,10 @@ export default function ConfiguracoesModal({ config, onSave }: Props) {
           <p className="text-[9px] font-semibold text-primary uppercase tracking-wider">Custos Fixos de Protocolo</p>
           <p className="text-[10px] text-muted-foreground -mt-1">Valores somados ao orçamento quando ativados na tela principal.</p>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <ProtoField label="ART / RRT" value={local.protocolo.art} onChange={v => updateProto('art', v)} />
             <ProtoField label="Pasta Prefeitura" value={local.protocolo.pasta} onChange={v => updateProto('pasta', v)} />
             <ProtoField label="Assinatura Técnica" value={local.protocolo.assinatura} onChange={v => updateProto('assinatura', v)} />
-            <ProtoField label="Custo por Visita" value={local.protocolo.custoVisita} onChange={v => updateProto('custoVisita', v)} />
           </div>
         </div>
 

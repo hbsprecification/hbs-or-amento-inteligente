@@ -4,6 +4,7 @@ import { formatBRL, calcularPrecoFinal } from "@/lib/orcamento";
 interface Props {
   custoTecnico: number;
   custoProtocolos: number;
+  totalHoras: number;
   lucro: number;
   impostos: number;
   comissao: number;
@@ -13,7 +14,7 @@ interface Props {
 }
 
 export default function ResumoFixo({
-  custoTecnico, custoProtocolos, lucro, impostos, comissao,
+  custoTecnico, custoProtocolos, totalHoras, lucro, impostos, comissao,
   onLucroChange, onImpostosChange, onComissaoChange,
 }: Props) {
   const resultado = calcularPrecoFinal(custoTecnico, custoProtocolos, lucro, impostos, comissao);
@@ -27,7 +28,8 @@ export default function ResumoFixo({
           <PctInput icon={<Users className="w-2.5 h-2.5" />} label="Comissão" value={comissao} onChange={onComissaoChange} />
         </div>
 
-        <div className="grid grid-cols-4 gap-1">
+        <div className="grid grid-cols-5 gap-1">
+          <Box label="Total de Horas" value={`${totalHoras}h`} cls="bg-primary/10 text-primary border border-primary/20" />
           <Box label="Técnico" value={formatBRL(custoTecnico)} cls="bg-surface text-foreground" />
           <Box label="Taxas" value={formatBRL(custoProtocolos)} cls="bg-warning/10 text-warning" />
           <Box label="Comissão" value={formatBRL(resultado.comissao)} cls="bg-highlight/10 text-highlight" />
