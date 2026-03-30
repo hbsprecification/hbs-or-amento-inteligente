@@ -1,21 +1,23 @@
 import { useState, useMemo } from "react";
+import { FileCheck, RotateCcw } from "lucide-react";
 import ConfiguracoesModal, { ConfigData, loadConfig } from "@/components/ConfiguracoesModal";
 import ChecklistEtapas from "@/components/ChecklistEtapas";
 import ResumoFixo from "@/components/ResumoFixo";
 import GerarPropostaModal from "@/components/GerarPropostaModal";
+import { Switch } from "@/components/ui/switch";
 import {
-  EtapaServico,
-  ETAPAS_PADRAO,
-  calcularCustoHora,
-  calcularCustoEtapa,
+  EtapaServico, ETAPAS_PADRAO, calcularCustoHora, calcularCustoEtapa,
+  calcularTotalProtocolos, formatBRL,
+  type ProtocolosSelecionados,
 } from "@/lib/orcamento";
 
 const initEtapas = (): EtapaServico[] =>
-  ETAPAS_PADRAO.map(e => ({ ...e, ativa: false, visitas: 0, horas: 0, custoFixo: 0 }));
+  ETAPAS_PADRAO.map(e => ({ ...e, ativa: false, visitas: 0, horas: 0 }));
 
 export default function Index() {
   const [config, setConfig] = useState<ConfigData>(loadConfig);
   const [etapas, setEtapas] = useState<EtapaServico[]>(initEtapas);
+  const [protocolos, setProtocolos] = useState<ProtocolosSelecionados>({ art: false, pasta: false, assinatura: false });
   const [lucro, setLucro] = useState(30);
   const [impostos, setImpostos] = useState(5);
   const [comissao, setComissao] = useState(15);
@@ -23,58 +25,95 @@ export default function Index() {
   const custoOperacional = config.custosFixos + config.custosVariaveis + config.investimentos;
   const custoHora = calcularCustoHora(custoOperacional, config.horasProdutivas);
 
-  const custoExecucao = useMemo(
-    () => etapas.filter(e => e.ativa).reduce((s, e) => s + calcularCustoEtapa(e, custoHora), 0),
-    [etapas, custoHora]
+  const custoTecnico = useMemo(
+    () => etapas.filter(e => e.ativa).reduce((s, e) => s + calcularCustoEtapa(e, custoHora, config.protocolo.custoVisita), 0),
+    [etapas, custoHora, config.protocolo.custoVisita]
   );
 
+  const custoProtocolos = calcularTotalProtocolos(protocolos, config.protocolo);
+
+  const clearAll = () => {
+    setEtapas(initEtapas());
+    setProtocolos({ art: false, pasta: false, assinatura: false });
+  };
+
+  const toggleProto = (key: keyof ProtocolosSelecionados) => {
+    setProtocolos(p => ({ ...p, [key]: !p[key] }));
+  };
+
   return (
-    <div className="min-h-screen bg-background pb-36">
+    <div className="min-h-screen bg-background pb-32">
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/logo-hbs.png" alt="HBS Engenharia" className="w-9 h-9 object-contain" />
+        <div className="max-w-5xl mx-auto px-3 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <img src="/logo-hbs.png" alt="HBS" className="w-8 h-8 object-contain" />
             <div>
-              <h1 className="text-base font-bold text-foreground leading-none">HBS Orçamentos</h1>
-              <p className="text-xs text-muted-foreground">Modelo de Precificação</p>
+              <h1 className="text-sm font-bold text-foreground leading-none">HBS Orçamentos</h1>
+              <p className="text-[10px] text-muted-foreground">Precificação</p>
             </div>
           </div>
           <div className="flex items-center gap-1">
             <ConfiguracoesModal config={config} onSave={setConfig} />
             <GerarPropostaModal
-              etapas={etapas}
-              custoHora={custoHora}
-              lucro={lucro}
-              impostos={impostos}
-              comissao={comissao}
+              etapas={etapas} custoHora={custoHora} custoVisita={config.protocolo.custoVisita}
+              protocolos={protocolos} custosProtocolo={config.protocolo}
+              lucro={lucro} impostos={impostos} comissao={comissao}
             />
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-5 space-y-4">
-        {/* Custo/hora badge */}
-        <div className="flex items-center justify-between glass-card px-4 py-2.5">
-          <span className="text-xs text-muted-foreground uppercase tracking-wide">Custo Hora Técnica</span>
-          <span className="text-lg font-extrabold text-gradient">
-            {custoHora.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}/h
-          </span>
+      <main className="max-w-5xl mx-auto px-3 py-3 space-y-3">
+        {/* Custo/hora */}
+        <div className="flex items-center justify-between glass-card px-3 py-2">
+          <span className="text-[10px] text-muted-foreground uppercase tracking-wide">Custo Hora</span>
+          <span className="text-base font-extrabold text-gradient">{formatBRL(custoHora)}/h</span>
+        </div>
+
+        {/* Protocolos toggles */}
+        <div className="glass-card p-3">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-1.5">
+              <FileCheck className="w-3.5 h-3.5 text-primary" />
+              <span className="text-[10px] font-semibold text-foreground uppercase tracking-wide">Taxas e Protocolos</span>
+            </div>
+            <button onClick={clearAll}
+              className="flex items-center gap-0.5 text-[9px] text-muted-foreground hover:text-destructive px-1.5 py-0.5 rounded hover:bg-destructive/10">
+              <RotateCcw className="w-2.5 h-2.5" /> Limpar tudo
+            </button>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <ProtoToggle label="ART/RRT" value={config.protocolo.art} checked={protocolos.art} onToggle={() => toggleProto('art')} />
+            <ProtoToggle label="Pasta Prefeitura" value={config.protocolo.pasta} checked={protocolos.pasta} onToggle={() => toggleProto('pasta')} />
+            <ProtoToggle label="Assinatura" value={config.protocolo.assinatura} checked={protocolos.assinatura} onToggle={() => toggleProto('assinatura')} />
+          </div>
         </div>
 
         {/* Etapas */}
-        <ChecklistEtapas etapas={etapas} custoHora={custoHora} onUpdate={setEtapas} />
+        <div className="glass-card p-3">
+          <h2 className="text-xs font-semibold text-foreground mb-2">Serviços Técnicos</h2>
+          <ChecklistEtapas etapas={etapas} custoHora={custoHora} custoVisita={config.protocolo.custoVisita} onUpdate={setEtapas} />
+        </div>
       </main>
 
-      {/* Sticky footer */}
       <ResumoFixo
-        custoExecucao={custoExecucao}
-        lucro={lucro}
-        impostos={impostos}
-        comissao={comissao}
-        onLucroChange={setLucro}
-        onImpostosChange={setImpostos}
-        onComissaoChange={setComissao}
+        custoTecnico={custoTecnico}
+        custoProtocolos={custoProtocolos}
+        lucro={lucro} impostos={impostos} comissao={comissao}
+        onLucroChange={setLucro} onImpostosChange={setImpostos} onComissaoChange={setComissao}
       />
+    </div>
+  );
+}
+
+function ProtoToggle({ label, value, checked, onToggle }: { label: string; value: number; checked: boolean; onToggle: () => void }) {
+  return (
+    <div className={`flex flex-col items-center gap-1 p-2 rounded-md border transition-all cursor-pointer ${
+      checked ? 'bg-primary/10 border-primary/30' : 'bg-surface border-border/20 opacity-50'
+    }`} onClick={onToggle}>
+      <Switch checked={checked} onCheckedChange={onToggle} className="scale-75" />
+      <span className="text-[9px] font-medium text-foreground text-center leading-tight">{label}</span>
+      <span className={`text-[10px] font-bold ${checked ? 'text-primary' : 'text-muted-foreground'}`}>{formatBRL(value)}</span>
     </div>
   );
 }
