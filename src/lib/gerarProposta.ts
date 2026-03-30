@@ -8,7 +8,8 @@ export async function gerarPropostaPDF(
   lucro: number,
   impostos: number,
   comissao: number,
-  nomeCliente: string
+  nomeCliente: string,
+  localObra?: string
 ) {
   const doc = new jsPDF();
   const ativas = etapas.filter(e => e.ativa);
