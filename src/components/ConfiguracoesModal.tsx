@@ -100,9 +100,9 @@ export default function ConfiguracoesModal({ config, onSave }: Props) {
         </DialogHeader>
 
         <div className="space-y-3 mt-2">
-          {field("Custos Fixos", local.custosFixos, "custosFixos", "Aluguel, energia, internet, etc.")}
-          {field("Custos Variáveis", local.custosVariaveis, "custosVariaveis", "Material, combustível, manutenção")}
-          {field("Investimentos", local.investimentos, "investimentos", "Software, equipamentos, capacitação")}
+          {field("Custos Fixos", local.custosFixos, "custosFixos", "Soma das contas que não mudam (Aluguel, Internet, Condomínio, Softwares).")}
+          {field("Custos Variáveis", local.custosVariaveis, "custosVariaveis", "Despesas que oscilam conforme o volume de obras (Combustível, Impressões, Taxas de Cartório).")}
+          {field("Investimentos", local.investimentos, "investimentos", "Verba para crescimento (Anúncios no Instagram, Cursos, Equipamentos novos).")}
 
           <div className="p-3 rounded-lg bg-surface">
             <label className="text-xs text-muted-foreground uppercase tracking-wide mb-1.5 block">Horas Produtivas/Mês</label>
@@ -111,6 +111,7 @@ export default function ConfiguracoesModal({ config, onSave }: Props) {
               onChange={e => setLocal({ ...local, horasProdutivas: Math.max(1, +e.target.value) })}
               className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground font-semibold focus:outline-none focus:ring-2 focus:ring-ring"
             />
+            <p className="text-[11px] text-muted-foreground mt-1">Total de horas reais que você dedica a serviços técnicos (Recomendado: 74h a 100h para ser realista).</p>
           </div>
 
           <div className="p-4 rounded-xl gradient-primary glow-primary text-center">
@@ -119,6 +120,7 @@ export default function ConfiguracoesModal({ config, onSave }: Props) {
             <div className="w-12 h-px bg-primary-foreground/20 mx-auto my-2" />
             <p className="text-xs text-primary-foreground/70 uppercase tracking-wide mb-0.5">Custo por Hora</p>
             <p className="text-2xl font-extrabold text-primary-foreground">{formatBRL(custoHora)}</p>
+            <p className="text-[10px] text-primary-foreground/60 mt-1.5 max-w-[280px] mx-auto leading-relaxed">Este é o custo mínimo que sua hora de trabalho deve cobrir para o escritório não ter prejuízo.</p>
           </div>
         </div>
 
