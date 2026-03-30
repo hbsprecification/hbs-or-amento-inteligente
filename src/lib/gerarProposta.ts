@@ -8,7 +8,8 @@ export async function gerarPropostaPDF(
   lucro: number,
   impostos: number,
   comissao: number,
-  nomeCliente: string
+  nomeCliente: string,
+  localObra?: string
 ) {
   const doc = new jsPDF();
   const ativas = etapas.filter(e => e.ativa);
@@ -44,7 +45,12 @@ export async function gerarPropostaPDF(
 
   doc.setFontSize(11);
   doc.text(`Cliente: ${nomeCliente || 'A definir'}`, 15, 52);
-  doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 15, 58);
+  if (localObra) {
+    doc.text(`Local: ${localObra}`, 15, 58);
+    doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 15, 64);
+  } else {
+    doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 15, 58);
+  }
   doc.text(`Validade: 30 dias`, 120, 58);
 
   // Group services by grupo
