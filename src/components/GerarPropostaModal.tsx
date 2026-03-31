@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileText, MapPin, User, Calendar } from "lucide-react";
+import { FileText, MapPin, User, Calendar, Receipt } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription,
@@ -26,11 +26,12 @@ export default function GerarPropostaModal({ etapas, custoHora, protocolos, cust
   const [objetivo, setObjetivo] = useState("");
   const [localObra, setLocalObra] = useState("");
   const [prazo, setPrazo] = useState(30);
+  const [modeloPagamento, setModeloPagamento] = useState<"berta" | "rapido">("berta");
 
   const ativas = etapas.filter(e => e.ativa).length;
 
   const handleGerar = () => {
-    gerarPropostaPDF(etapas, custoHora, protocolos, custosProtocolo, lucro, impostos, comissao, nomeCliente, objetivo, localObra, prazo);
+    gerarPropostaPDF(etapas, custoHora, protocolos, custosProtocolo, lucro, impostos, comissao, nomeCliente, objetivo, localObra, prazo, modeloPagamento);
     setOpen(false);
   };
 
@@ -69,6 +70,16 @@ export default function GerarPropostaModal({ etapas, custoHora, protocolos, cust
           <Field icon={<Calendar className="w-3 h-3" />} label="Prazo (Dias)">
             <input type="number" min={1} value={prazo} onChange={e => setPrazo(Math.max(1, +e.target.value))}
               className="w-full bg-background border border-border rounded px-2 py-1.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ring" />
+          </Field>
+          <Field icon={<Receipt className="w-3 h-3" />} label="Modelo de Pagamento">
+            <select 
+              value={modeloPagamento} 
+              onChange={e => setModeloPagamento(e.target.value as "berta" | "rapido")}
+              className="w-full bg-background border border-border rounded px-2 py-1.5 text-sm text-foreground font-semibold focus:outline-none focus:ring-1 focus:ring-ring"
+            >
+              <option value="berta">Modelo Berta (50 / 20 / 20 / 10)</option>
+              <option value="rapido">Modelo Rápido (50 / 50)</option>
+            </select>
           </Field>
         </div>
 

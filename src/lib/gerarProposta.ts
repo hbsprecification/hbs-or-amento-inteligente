@@ -16,7 +16,8 @@ export async function gerarPropostaPDF(
   nomeCliente: string,
   objetivo?: string,
   localObra?: string,
-  prazo?: number
+  prazo?: number,
+  modeloPagamento: "berta" | "rapido" = "berta"
 ) {
   const doc = new jsPDF();
   const ativas = etapas.filter(e => e.ativa);
@@ -78,7 +79,7 @@ export async function gerarPropostaPDF(
   doc.text(`${new Date().toLocaleDateString('pt-BR')}`, 27, y);
   
   doc.setFont("helvetica", "bold");
-  doc.text(`Validade: 30 dias`, 120, y);
+  doc.text(`Validade: 15 dias`, 120, y);
   
   if (prazo) { 
     y += 6; 
@@ -151,12 +152,10 @@ export async function gerarPropostaPDF(
   y += 24;
 
   // Frase de Validade
-  doc.setTextColor(100);
-  doc.setFontSize(9);
-  doc.setFont("helvetica", "italic");
-  doc.text("Proposta válida por 30 dias a partir da data de emissão.", 15, y);
-
-  y += 12;
+  doc.setTextColor(150);
+  doc.setFontSize(8);
+  doc.setFont("helvetica", "normal");
+  doc.text("Documento HBS Soluções em Engenharia | Proposta válida por 15 dias a partir da data de emissão.", 15, 285);
 
   // Condições de Pagamento
   doc.setTextColor(40);
@@ -167,14 +166,21 @@ export async function gerarPropostaPDF(
   y += 7;
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  const p50 = formatBRL(resultado.precoVenda * 0.5);
-  const p20 = formatBRL(resultado.precoVenda * 0.2);
-  const p10 = formatBRL(resultado.precoVenda * 0.1);
+  
+  if (modeloPagamento === "berta") {
+    const p50 = formatBRL(resultado.precoVenda * 0.5);
+    const p20 = formatBRL(resultado.precoVenda * 0.2);
+    const p10 = formatBRL(resultado.precoVenda * 0.1);
 
-  doc.text(`• 50% na vistoria / assinatura do contrato (${p50})`, 20, y);
-  doc.text(`• 20% no protocolo de licença (${p20})`, 20, y + 6);
-  doc.text(`• 20% na emissão do Habite-se (${p20})`, 20, y + 12);
-  doc.text(`• 10% no protocolo do Cartório (${p10})`, 20, y + 18);
+    doc.text(`• 50% na vistoria / assinatura do contrato (${p50})`, 20, y);
+    doc.text(`• 20% no protocolo de licença (${p20})`, 20, y + 6);
+    doc.text(`• 20% na emissão do Habite-se (${p20})`, 20, y + 12);
+    doc.text(`• 10% no protocolo do Cartório (${p10})`, 20, y + 18);
+  } else {
+    const p50 = formatBRL(resultado.precoVenda * 0.5);
+    doc.text(`• 50% na vistoria / assinatura do contrato (${p50})`, 20, y);
+    doc.text(`• 50% no protocolo da prefeitura (${p50})`, 20, y + 6);
+  }
 
   y += 28;
 

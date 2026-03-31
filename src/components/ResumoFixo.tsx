@@ -40,9 +40,14 @@ export default function ResumoFixo({
           </div>
           
           <div className="md:w-64 shrink-0 flex flex-col justify-end mt-2 sm:mt-0">
-            <div className="flex justify-between items-end mb-2 px-1">
+            <div className="flex justify-between items-end px-1">
               <span className="text-[9px] sm:text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Preço Final</span>
               <span className="text-lg sm:text-2xl font-black text-foreground drop-shadow-md tracking-tighter">{formatBRL(resultado.precoVenda)}</span>
+            </div>
+            
+            <div className="flex justify-between items-center px-2 py-1.5 bg-highlight/10 border border-highlight/20 rounded-md mt-1 mb-2">
+              <span className="text-[8px] sm:text-[9px] text-highlight uppercase font-black tracking-widest">Lucro Líquido HBS</span>
+              <span className="text-xs sm:text-sm font-black text-highlight tracking-tighter">{formatBRL(resultado.precoVenda - resultado.comissao - resultado.imposto)}</span>
             </div>
             {children}
           </div>
