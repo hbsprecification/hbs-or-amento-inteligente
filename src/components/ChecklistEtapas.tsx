@@ -66,12 +66,9 @@ export default function ChecklistEtapas({ etapas, custoHora, onUpdate }: Props) 
                             'pranchas': { h: 2 },
                             'fracao-ideal': { h: 6 },
                             'inst-convencao': { h: 12 },
-                            'habite-se': { h: 8 },
                             'certidao-tributos': { h: 4 },
                             'protocolos': { v: 1 },
-                            'proto-cartorio': { v: 1 },
-                            'acompanhamento': { v: 1 },
-                            'averbacao': { v: 1 },
+                            'acompanhamento': { v: 1 }
                           };
                           const def = defaults[etapa.id] || { h: 4 };
                           if (def.v) patch.visitas = def.v;

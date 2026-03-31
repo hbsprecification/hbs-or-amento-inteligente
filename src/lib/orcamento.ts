@@ -25,7 +25,6 @@ export const ETAPAS_PADRAO: Omit<EtapaServico, 'ativa' | 'visitas' | 'horas'>[] 
 
   // Módulo Documental
   { id: 'fracao-ideal', nome: 'Memorial Descritivo + Fração Ideal', grupo: GRUPOS[1] },
-  { id: 'habite-se', nome: 'Habite-se', grupo: GRUPOS[1] },
 
   // Módulo Jurídico
   { id: 'inst-convencao', nome: 'Instituição e Convenção de Condomínio', grupo: GRUPOS[2] },
@@ -34,9 +33,7 @@ export const ETAPAS_PADRAO: Omit<EtapaServico, 'ativa' | 'visitas' | 'horas'>[] 
   // Módulo Trâmite
   { id: 'certidao-tributos', nome: 'Certidão de Área Construída (Tributos)', grupo: GRUPOS[3] },
   { id: 'protocolos', nome: 'Protocolos em Órgãos', grupo: GRUPOS[3] },
-  { id: 'proto-cartorio', nome: 'Protocolo Cartorial', grupo: GRUPOS[3] },
   { id: 'acompanhamento', nome: 'Acompanhamento do Processo', grupo: GRUPOS[3] },
-  { id: 'averbacao', nome: 'Acompanhamento e Averbações', grupo: GRUPOS[3] },
 ];
 
 // Custos fixos de protocolo (valores padrão)
