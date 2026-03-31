@@ -46,8 +46,8 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-32">
-      <header className="glass-header shadow-sm">
+    <div className="min-h-screen bg-background pb-[320px] sm:pb-36 flex flex-col overflow-y-auto">
+      <header className="glass-header shadow-sm shrink-0">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-1.5 bg-primary/10 rounded-xl border border-primary/20">
@@ -94,7 +94,7 @@ export default function Index() {
         </div>
 
         {/* Etapas */}
-        <div className="glass-card p-3">
+        <div className="glass-card p-3 flex-1 mb-8">
           <h2 className="text-xs font-semibold text-foreground mb-2">Serviços Técnicos</h2>
           <ChecklistEtapas etapas={etapas} custoHora={custoHora} onUpdate={setEtapas} />
         </div>

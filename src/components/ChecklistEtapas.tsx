@@ -33,10 +33,10 @@ export default function ChecklistEtapas({ etapas, custoHora, onUpdate }: Props) 
           <div key={grupo} className="rounded-2xl border border-white/5 bg-surface/30 overflow-hidden">
             <button
               onClick={() => toggleGroup(grupo)}
-              className="w-full flex items-center justify-between p-3 bg-surface hover:bg-surface/80 transition-colors"
+              className="w-full flex items-center justify-between py-4 px-3 sm:px-4 sm:py-5 bg-surface hover:bg-surface/80 transition-colors cursor-pointer select-none"
             >
-              <h3 className="text-[11px] font-bold text-foreground uppercase tracking-widest">{grupo}</h3>
-              {isOpen ? <ChevronDown className="w-4 h-4 text-muted-foreground" /> : <ChevronRight className="w-4 h-4 text-muted-foreground" />}
+              <h3 className="text-[12px] sm:text-[13px] font-bold text-foreground uppercase tracking-widest leading-none">{grupo}</h3>
+              {isOpen ? <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground" /> : <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground" />}
             </button>
             
             {isOpen && (
