@@ -17,10 +17,11 @@ export const GRUPOS = [
 export const ETAPAS_PADRAO: Omit<EtapaServico, 'ativa' | 'visitas' | 'horas'>[] = [
   // Módulo Projeto
   { id: 'levantamento', nome: 'Levantamento Cadastral', grupo: GRUPOS[0] },
-  { id: 'planta', nome: 'Planta Baixa', grupo: GRUPOS[0] },
-  { id: 'cortes', nome: 'Cortes', grupo: GRUPOS[0] },
-  { id: 'fachadas', nome: 'Fachadas', grupo: GRUPOS[0] },
-  { id: 'situacao', nome: 'Situação / Cobertura', grupo: GRUPOS[0] },
+  { id: 'arq', nome: 'Projeto Arquitetônico', grupo: GRUPOS[0] },
+  { id: 'cortes-fachadas', nome: 'Cortes e Fachadas', grupo: GRUPOS[0] },
+  { id: 'situacao', nome: 'Planta de Situação', grupo: GRUPOS[0] },
+  { id: 'calculos', nome: 'Cálculo para Aprovação', grupo: GRUPOS[0] },
+  { id: 'pranchas', nome: 'Pranchas para Impressão', grupo: GRUPOS[0] },
 
   // Módulo Documental
   { id: 'memoriais-desc', nome: 'Memorial Descritivo', grupo: GRUPOS[1] },

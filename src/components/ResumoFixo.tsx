@@ -31,18 +31,18 @@ export default function ResumoFixo({
               <PctInput icon={<Users className="w-3 h-3 text-primary" />} label="Comissão" value={comissao} onChange={onComissaoChange} />
             </div>
 
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2 sm:mt-0">
               <Box label="Total de Horas" value={`${totalHoras}h`} cls="bg-primary/10 text-primary border border-primary/20" />
               <Box label="Custo Técnico" value={formatBRL(custoTecnico)} cls="bg-surface text-foreground border border-white/5" />
-              <Box label="Taxas" value={formatBRL(custoProtocolos)} cls="bg-warning/10 text-warning border border-warning/20" />
+              <Box label="Taxas Extras" value={formatBRL(custoProtocolos)} cls="bg-warning/10 text-warning border border-warning/20" />
               <Box label="Comissão" value={formatBRL(resultado.comissao)} cls="bg-highlight/10 text-highlight border border-highlight/20" />
             </div>
           </div>
           
-          <div className="md:w-64 shrink-0 flex flex-col justify-end">
+          <div className="md:w-64 shrink-0 flex flex-col justify-end mt-2 sm:mt-0">
             <div className="flex justify-between items-end mb-2 px-1">
-              <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Preço Final</span>
-              <span className="text-2xl font-black text-foreground drop-shadow-md">{formatBRL(resultado.precoVenda)}</span>
+              <span className="text-[9px] sm:text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Preço Final</span>
+              <span className="text-lg sm:text-2xl font-black text-foreground drop-shadow-md tracking-tighter">{formatBRL(resultado.precoVenda)}</span>
             </div>
             {children}
           </div>
@@ -67,9 +67,9 @@ function PctInput({ icon, label, value, onChange }: { icon: React.ReactNode; lab
 
 function Box({ label, value, cls }: { label: string; value: string; cls: string }) {
   return (
-    <div className={`rounded-xl px-3 py-2 text-left ${cls}`}>
-      <p className={`text-[8px] uppercase font-bold tracking-widest text-muted-foreground mb-0.5`}>{label}</p>
-      <p className="text-sm font-black truncate">{value}</p>
+    <div className={`rounded-xl px-2 py-1.5 sm:px-3 sm:py-2 flex flex-col justify-center ${cls}`}>
+      <p className={`text-[7.5px] sm:text-[8px] uppercase font-bold tracking-wider sm:tracking-widest text-muted-foreground mb-0.5 whitespace-nowrap overflow-hidden text-ellipsis`}>{label}</p>
+      <p className="text-[11.5px] sm:text-sm font-black tracking-tighter whitespace-nowrap overflow-hidden text-ellipsis">{value}</p>
     </div>
   );
 }

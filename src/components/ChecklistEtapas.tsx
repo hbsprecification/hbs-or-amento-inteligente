@@ -57,8 +57,25 @@ export default function ChecklistEtapas({ etapas, custoHora, onUpdate }: Props) 
                         const ativa = !etapa.ativa;
                         const patch: Partial<EtapaServico> = { ativa };
                         if (ativa && etapa.visitas === 0 && etapa.horas === 0) {
-                          if (etapa.id === 'levantamento') patch.visitas = 1;
-                          else patch.horas = 4; // Sugestão padrão leve
+                          const defaults: Record<string, { v?: number, h?: number }> = {
+                            'levantamento': { v: 1 },
+                            'arq': { h: 16 },
+                            'cortes-fachadas': { h: 8 },
+                            'situacao': { h: 4 },
+                            'calculos': { h: 4 },
+                            'pranchas': { h: 2 },
+                            'fracao-ideal': { h: 6 },
+                            'inst-convencao': { h: 12 },
+                            'habite-se': { h: 8 },
+                            'certidao-tributos': { h: 4 },
+                            'protocolos': { v: 1 },
+                            'proto-cartorio': { v: 1 },
+                            'acompanhamento': { v: 1 },
+                            'averbacao': { v: 1 },
+                          };
+                          const def = defaults[etapa.id] || { h: 4 };
+                          if (def.v) patch.visitas = def.v;
+                          if (def.h) patch.horas = def.h;
                         }
                         update(etapa.id, patch);
                       }}>
