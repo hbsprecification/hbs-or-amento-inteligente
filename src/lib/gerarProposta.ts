@@ -123,7 +123,7 @@ export async function gerarPropostaPDF(
   if (protocolos.assinatura) protoItems.push(`Assinatura Técnica (${formatBRL(custosProtocolo.assinatura)})`);
 
   if (protoItems.length > 0) {
-    y += 2;
+    y += 6;
     doc.setFontSize(9);
     doc.setFont("helvetica", "bold");
     doc.text("Taxas e Protocolos Inclusos:", 15, y);
@@ -133,57 +133,73 @@ export async function gerarPropostaPDF(
       doc.text(`• ${item}`, 20, y);
       y += 5;
     });
-    y += 3;
+    // Extra safety margin after protocols to avoid overlap
+    y += 10;
+  } else {
+    y += 15;
   }
 
-  // Total
-  y += 8;
-  doc.setFontSize(15);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(30);
-  doc.text(`VALOR TOTAL DO INVESTIMENTO: ${formatBRL(resultado.precoVenda)}`, 15, y + 5);
-
-  // Pagamento - Solid Terracota Box
-  y += 15;
-  const payY = y;
-  doc.setFillColor(192, 90, 62); // Hex #C05A3E
-  doc.rect(15, payY, 180, 38, 'F');
+  // Bloco de Destaque - VALOR TOTAL
+  doc.setFillColor(192, 90, 62); // Terracota HBS
+  doc.rect(15, y, 180, 16, 'F');
   
   doc.setTextColor(255, 255, 255);
+  doc.setFontSize(13);
+  doc.setFont("helvetica", "bold");
+  doc.text(`VALOR TOTAL DO INVESTIMENTO: ${formatBRL(resultado.precoVenda)}`, 20, y + 10.5);
+
+  y += 24;
+
+  // Frase de Validade
+  doc.setTextColor(100);
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "italic");
+  doc.text("Proposta válida por 30 dias a partir da data de emissão.", 15, y);
+
+  y += 12;
+
+  // Condições de Pagamento
+  doc.setTextColor(40);
   doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
-  doc.text("CONDIÇÕES DE PAGAMENTO:", 20, payY + 8);
+  doc.text("Condições Gerais de Pagamento:", 15, y);
   
+  y += 7;
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
   const p50 = formatBRL(resultado.precoVenda * 0.5);
   const p20 = formatBRL(resultado.precoVenda * 0.2);
   const p10 = formatBRL(resultado.precoVenda * 0.1);
 
-  doc.text(`• 50% na vistoria / assinatura do contrato (${p50})`, 20, payY + 16);
-  doc.text(`• 20% no protocolo de licença (${p20})`, 20, payY + 23);
-  doc.text(`• 20% na emissão do Habite-se (${p20})`, 20, payY + 30);
-  doc.text(`• 10% na Averbação e Finalização (${p10})`, 20, payY + 37);
+  doc.text(`• 50% na vistoria / assinatura do contrato (${p50})`, 20, y);
+  doc.text(`• 20% no protocolo de licença (${p20})`, 20, y + 6);
+  doc.text(`• 20% na emissão do Habite-se (${p20})`, 20, y + 12);
+  doc.text(`• 10% no protocolo do Cartório (${p10})`, 20, y + 18);
 
-  y = payY + 50;
+  y += 28;
 
-  // Cláusulas de Segurança Restritivas
-  doc.setTextColor(200, 50, 50);
-  doc.setFontSize(10);
+  // Texto de Notas / Segurança
+  doc.setTextColor(100);
+  doc.setFontSize(8);
+  doc.setFont("helvetica", "normal");
+  doc.text("* Não estão inclusos taxas de prefeitura, emolumentos de cartório e impostos, que são de responsabilidade do contratante.", 15, y);
+
+  y += 35;
+
+  // Assinatura Centralizada
+  doc.setTextColor(40);
   doc.setFont("helvetica", "bold");
-  doc.text("NÃO INCLUSO NESTE ORÇAMENTO (CUSTOS DO CLIENTE):", 15, y);
-  
+  doc.setFontSize(10);
+  // doc.text centered at X=105 (A4 width is 210)
+  doc.text("__________________________________________", 105, y, { align: "center" });
   y += 6;
-  doc.setTextColor(80);
+  doc.text("Jadson Castro Santana", 105, y, { align: "center" });
+  y += 5;
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
-  const notasText = "Taxas e emolumentos de prefeitura, impostos incidentes sobre a obra/regularização, custas cartoriais, despachos judiciais, multas anteriores, correios e taxas obrigatórias de emissão de guias ART/RRT não compõem estes honorários operacionais e deverão ser custeados exclusivamente pelo próprio contratante.";
-  const splitNotas = doc.splitTextToSize(notasText, 180);
-  doc.text(splitNotas, 15, y);
-
-  doc.setFontSize(8);
-  doc.setTextColor(150);
-  doc.text("Documento HBS Soluções em Engenharia | Proposta válida por 30 dias a partir da data de emissão.", 15, 285);
+  doc.text("Eng. Civil", 105, y, { align: "center" });
+  y += 5;
+  doc.text("CREA: 052062534-1", 105, y, { align: "center" });
 
   doc.save(`proposta-hbs-${Date.now()}.pdf`);
 }
