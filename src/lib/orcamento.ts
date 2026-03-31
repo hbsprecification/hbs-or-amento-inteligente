@@ -1,40 +1,33 @@
 export interface EtapaServico {
   id: string;
   nome: string;
-  grupo: string;
+  descricao: string;
   ativa: boolean;
   visitas: number;
   horas: number;
 }
 
-export const GRUPOS = [
-  'CATEGORIA 1: PROJETO PARAMÉTRICO (PREFEITURA)',
-  'CATEGORIA 2: REGULARIZAÇÃO FINAL E DOCUMENTOS',
-  'CATEGORIA 3: SERVIÇOS DE DESPACHANTE E TRAMITAÇÃO',
-];
-
 export const ETAPAS_PADRAO: Omit<EtapaServico, 'ativa' | 'visitas' | 'horas'>[] = [
-  // CATEGORIA 1
-  { id: 'arq', nome: 'Projeto Arquitetônico', grupo: GRUPOS[0] },
-  { id: 'corte-fachada', nome: 'Corte e Fachada', grupo: GRUPOS[0] },
-  { id: 'situacao', nome: 'Planta de Situação', grupo: GRUPOS[0] },
-  { id: 'calculos', nome: 'Cálculo para Aprovação', grupo: GRUPOS[0] },
-  { id: 'pranchas', nome: 'Pranchas para Impressão', grupo: GRUPOS[0] },
-
-  // CATEGORIA 2
-  { id: 'memorial-desc', nome: 'Memorial Descritivo', grupo: GRUPOS[1] },
-  { id: 'memorial-normas', nome: 'Memorial de Normas', grupo: GRUPOS[1] },
-  { id: 'memorial-fracao', nome: 'Memorial com Fração Ideal', grupo: GRUPOS[1] },
-  { id: 'convencao', nome: 'Convenção de Condomínio', grupo: GRUPOS[1] },
-  { id: 'quadro-areas', nome: 'Quadro de Áreas NBR 12721', grupo: GRUPOS[1] },
-  { id: 'habite-se', nome: 'Habite-se', grupo: GRUPOS[1] },
-  { id: 'certidao-area', nome: 'Certidão de Área Construída', grupo: GRUPOS[1] },
-
-  // CATEGORIA 3
-  { id: 'proto-pref', nome: 'Protocolo e Acompanhamento Prefeitura', grupo: GRUPOS[2] },
-  { id: 'proto-cartorio', nome: 'Protocolo e Acompanhamento Cartório', grupo: GRUPOS[2] },
-  { id: 'retirada-cert', nome: 'Retirada de Certidões', grupo: GRUPOS[2] },
-  { id: 'idas-orgaos', nome: 'Idas a Órgãos Públicos', grupo: GRUPOS[2] },
+  { 
+    id: 'projeto-paramétrico', 
+    nome: 'PROJETO PARAMÉTRICO', 
+    descricao: 'Arquitetônico, Cortes, Fachadas e Pranchas' 
+  },
+  { 
+    id: 'condominio-nbr', 
+    nome: 'CONDOMÍNIO E NBR', 
+    descricao: 'Memorial de Fração Ideal, Convenção e Quadro de Áreas' 
+  },
+  { 
+    id: 'regularizacao-doc', 
+    nome: 'REGULARIZAÇÃO DOCUMENTAL', 
+    descricao: 'Memorial Descritivo, Habite-se e Certidões' 
+  },
+  { 
+    id: 'gestao-tramite', 
+    nome: 'GESTÃO DE TRÂMITE', 
+    descricao: 'Protocolos e idas a órgãos públicos' 
+  },
 ];
 
 // Custos fixos de protocolo (valores padrão)

@@ -35,8 +35,10 @@ export default function Index() {
   const custoProtocolos = calcularTotalProtocolos(protocolos, config.protocolo);
 
   const clearAll = () => {
-    setEtapas(initEtapas());
-    setProtocolos({ art: false, pasta: false, assinatura: false });
+    if (confirm("Deseja zerar todo o orçamento?")) {
+      setEtapas(initEtapas());
+      setProtocolos({ art: false, pasta: false, assinatura: false });
+    }
   };
 
   const toggleProto = (key: keyof ProtocolosSelecionados) => {
@@ -57,6 +59,10 @@ export default function Index() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <button onClick={clearAll}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-destructive/10 text-destructive text-[10px] font-bold uppercase tracking-wider hover:bg-destructive hover:text-destructive-foreground transition-all">
+              <RotateCcw className="w-3.5 h-3.5" /> Zerar
+            </button>
             <ConfiguracoesModal config={config} onSave={setConfig} />
             <GerarPropostaModal
               etapas={etapas} custoHora={custoHora}
@@ -84,10 +90,6 @@ export default function Index() {
               <FileCheck className="w-3.5 h-3.5 text-primary" />
               <span className="text-[10px] font-semibold text-foreground uppercase tracking-wide">Taxas e Protocolos</span>
             </div>
-            <button onClick={clearAll}
-              className="flex items-center gap-0.5 text-[9px] text-muted-foreground hover:text-destructive px-1.5 py-0.5 rounded hover:bg-destructive/10">
-              <RotateCcw className="w-2.5 h-2.5" /> Limpar tudo
-            </button>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <ProtoToggle label="ART/RRT" value={config.protocolo.art} checked={protocolos.art} onToggle={() => toggleProto('art')} />

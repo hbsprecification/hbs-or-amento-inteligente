@@ -2,7 +2,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import {
   EtapaServico, calcularCustoEtapa, calcularTotalProtocolos, calcularPrecoFinal,
-  formatBRL, GRUPOS, type ProtocolosSelecionados, type CustosProtocolo,
+  formatBRL, type ProtocolosSelecionados, type CustosProtocolo,
 } from "@/lib/orcamento";
 
 export async function gerarPropostaPDF(
@@ -57,27 +57,33 @@ export async function gerarPropostaPDF(
   if (prazo) { y += 6; doc.text(`Prazo estimado: ${prazo} dias`, 15, y); }
   y += 10;
 
-  // Etapas por grupo
-  for (const grupo of GRUPOS) {
-    const eg = ativas.filter(e => e.grupo === grupo);
-    if (eg.length === 0) continue;
-
-    doc.setFontSize(9);
+  // Módulos de Serviço
+  if (ativas.length > 0) {
+    doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
-    doc.text(grupo, 15, y);
-    y += 3;
+    doc.text("Módulos de Serviço Inclusos:", 15, y);
+    y += 4;
 
     autoTable(doc, {
       startY: y,
-      head: [["Serviço", "Visitas (8h cada)", "H. Adicionais", "Total Dedicação"]],
-      body: eg.map(e => [e.nome, `${e.visitas}`, `${e.horas}h`, `${(e.visitas * 8) + e.horas}h`]),
+      head: [["Módulo", "Escopo Sugerido", "Total Dedicação"]],
+      body: ativas.map(e => [
+        e.nome, 
+        e.descricao, 
+        `${(e.visitas * 8) + e.horas}h`
+      ]),
       theme: "grid",
-      headStyles: { fillColor: [20, 50, 60], textColor: 255, fontSize: 9 },
-      styles: { fontSize: 9 },
+      headStyles: { fillColor: [40, 60, 50], textColor: 255, fontSize: 9 },
+      styles: { fontSize: 8, cellPadding: 3 },
+      columnStyles: {
+        0: { cellWidth: 40, fontStyle: 'bold' },
+        1: { cellWidth: 'auto' },
+        2: { cellWidth: 30, halign: 'center' }
+      },
       margin: { left: 15, right: 15 },
     });
 
-    y = (doc as any).lastAutoTable.finalY + 6;
+    y = (doc as any).lastAutoTable.finalY + 8;
   }
 
   // Protocolos inclusos
