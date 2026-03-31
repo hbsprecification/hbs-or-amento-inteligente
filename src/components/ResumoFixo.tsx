@@ -28,14 +28,14 @@ export default function ResumoFixo({
             <div className="flex items-center gap-2">
               <PctInput icon={<Percent className="w-3 h-3 text-primary" />} label="Lucro" value={lucro} onChange={onLucroChange} />
               <PctInput icon={<Receipt className="w-3 h-3 text-primary" />} label="Impostos" value={impostos} onChange={onImpostosChange} />
-              <PctInput icon={<Users className="w-3 h-3 text-primary" />} label="Comissão" value={comissao} onChange={onComissaoChange} />
+              <PctInput icon={<Users className="w-3 h-3 text-primary" />} label="Repasse" value={comissao} onChange={onComissaoChange} />
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2 sm:mt-0">
               <Box label="Total de Horas" value={`${totalHoras}h`} cls="bg-primary/10 text-primary border border-primary/20" />
               <Box label="Custo Técnico" value={formatBRL(custoTecnico)} cls="bg-surface text-foreground border border-white/5" />
-              <Box label="Taxas Extras" value={formatBRL(custoProtocolos)} cls="bg-warning/10 text-warning border border-warning/20" />
-              <Box label="Comissão" value={formatBRL(resultado.comissao)} cls="bg-highlight/10 text-highlight border border-highlight/20" />
+              <Box label="Minha Assinatura" value={formatBRL(custoProtocolos)} cls="bg-warning/10 text-warning border border-warning/20" />
+              <Box label="Repasse Projetista" value={formatBRL(resultado.comissao)} cls="bg-highlight/10 text-highlight border border-highlight/20" />
             </div>
           </div>
           
