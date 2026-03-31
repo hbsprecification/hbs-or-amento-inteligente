@@ -178,11 +178,30 @@ export async function gerarPropostaPDF(
 
   y += 28;
 
-  // Texto de Notas / Segurança
+  // Texto de Notas / Segurança Dinâmico
   doc.setTextColor(100);
   doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
-  doc.text("* Não estão inclusos taxas de prefeitura, emolumentos de cartório e impostos, que são de responsabilidade do contratante.", 15, y);
+  
+  let notasText = "";
+  if (protocolos.art && protocolos.pasta && protocolos.assinatura) {
+    notasText = "* Taxas de prefeitura (emolumentos do município) e impostos de cartório permanecem por conta do contratante, conforme a guia de recolhimento emitida pelos órgãos.";
+  } else {
+    const exclusions = [];
+    if (!protocolos.pasta) exclusions.push("taxas de prefeitura");
+    exclusions.push("emolumentos de cartório", "impostos");
+    if (!protocolos.art) exclusions.push("taxas de emissão de ART/RRT");
+
+    let exclusionString = exclusions.join(", ");
+    const lastCommaIdx = exclusionString.lastIndexOf(", ");
+    if (lastCommaIdx !== -1) {
+      exclusionString = exclusionString.substring(0, lastCommaIdx) + " e " + exclusionString.substring(lastCommaIdx + 2);
+    }
+    notasText = `* Não estão inclusos ${exclusionString}, que são de inteira responsabilidade do contratante.`;
+  }
+
+  const splitNotas = doc.splitTextToSize(notasText, 180);
+  doc.text(splitNotas, 15, y);
 
   y += 35;
 
