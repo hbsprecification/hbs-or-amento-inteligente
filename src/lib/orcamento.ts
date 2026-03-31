@@ -16,6 +16,7 @@ export const GRUPOS = [
 
 export const ETAPAS_PADRAO: Omit<EtapaServico, 'ativa' | 'visitas' | 'horas'>[] = [
   // Módulo Projeto
+  { id: 'levantamento', nome: 'Levantamento Cadastral', grupo: GRUPOS[0] },
   { id: 'planta', nome: 'Planta Baixa', grupo: GRUPOS[0] },
   { id: 'cortes', nome: 'Cortes', grupo: GRUPOS[0] },
   { id: 'fachadas', nome: 'Fachadas', grupo: GRUPOS[0] },
@@ -23,16 +24,19 @@ export const ETAPAS_PADRAO: Omit<EtapaServico, 'ativa' | 'visitas' | 'horas'>[] 
 
   // Módulo Documental
   { id: 'memoriais-desc', nome: 'Memorial Descritivo', grupo: GRUPOS[1] },
+  { id: 'fracao-ideal', nome: 'Fração Ideal', grupo: GRUPOS[1] },
   { id: 'habite-se', nome: 'Habite-se', grupo: GRUPOS[1] },
   { id: 'certidoes', nome: 'Certidões', grupo: GRUPOS[1] },
 
   // Módulo Jurídico
-  { id: 'fracao-ideal', nome: 'Fração Ideal', grupo: GRUPOS[2] },
-  { id: 'convencao', nome: 'Convenção de Condomínio', grupo: GRUPOS[2] },
+  { id: 'inst-convencao', nome: 'Instituição e Convenção de Condomínio', grupo: GRUPOS[2] },
   { id: 'nbr12721', nome: 'Quadro de Áreas NBR 12721', grupo: GRUPOS[2] },
 
   // Módulo Trâmite
+  { id: 'certidao-tributos', nome: 'Certidão de Área Construída (Tributos)', grupo: GRUPOS[3] },
   { id: 'protocolos', nome: 'Protocolos em Órgãos', grupo: GRUPOS[3] },
+  { id: 'proto-cartorio', nome: 'Protocolo Cartorial', grupo: GRUPOS[3] },
+  { id: 'acompanhamento', nome: 'Acompanhamento do Processo', grupo: GRUPOS[3] },
   { id: 'averbacao', nome: 'Acompanhamento e Averbações', grupo: GRUPOS[3] },
 ];
 

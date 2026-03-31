@@ -47,58 +47,63 @@ export default function ChecklistEtapas({ etapas, custoHora, onUpdate }: Props) 
                   return (
                     <div
                       key={etapa.id}
-                      className={`rounded-xl border transition-all duration-300 p-3 flex flex-col gap-3 ${
+                      className={`rounded-xl border transition-all duration-300 p-2.5 sm:p-3 flex flex-col gap-2.5 sm:gap-3 ${
                         etapa.ativa 
                           ? 'bg-card border-primary/40 shadow-[0_4px_20px_rgba(192,90,62,0.1)]' 
                           : 'bg-white/[0.02] border-white/5 opacity-50 hover:opacity-100 hover:border-white/10'
                       }`}
                     >
-                      <div className="flex items-center gap-3 cursor-pointer" onClick={() => {
+                      <div className="flex items-center gap-2 sm:gap-3 cursor-pointer" onClick={() => {
                         const ativa = !etapa.ativa;
                         const patch: Partial<EtapaServico> = { ativa };
                         if (ativa && etapa.visitas === 0 && etapa.horas === 0) {
-                          patch.horas = 4; // Sugestão padrão leve
+                          if (etapa.id === 'levantamento') patch.visitas = 1;
+                          else patch.horas = 4; // Sugestão padrão leve
                         }
                         update(etapa.id, patch);
                       }}>
                         {etapa.ativa ? (
-                          <CheckSquare className="w-5 h-5 text-primary shrink-0" />
+                          <CheckSquare className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
                         ) : (
-                          <Square className="w-5 h-5 text-muted-foreground shrink-0" />
+                          <Square className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground shrink-0" />
                         )}
-                        <span className="flex-1 text-[13px] font-bold text-foreground/90 tracking-tight">{etapa.nome}</span>
+                        <span className="flex-1 text-[11px] sm:text-[13px] font-bold text-foreground/90 tracking-tight leading-tight">{etapa.nome}</span>
                         {etapa.ativa && custo > 0 && (
-                          <span className="text-[12px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-md border border-primary/20">
+                          <span className="text-[10px] sm:text-[12px] font-black text-primary bg-primary/10 px-1.5 py-0.5 sm:px-2 rounded-md border border-primary/20 shrink-0">
                             {formatBRL(custo)}
                           </span>
                         )}
                       </div>
 
                       {etapa.ativa && (
-                        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-white/5">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2 border-t border-white/5">
                           {/* Inline Edit Visitas */}
-                          <div className="flex flex-1 items-center gap-2 bg-surface rounded-lg px-2 py-1.5 border border-white/5 focus-within:border-primary/50 transition-colors">
-                            <MapPin className="w-3.5 h-3.5 text-primary opacity-80" />
-                            <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest flex-1">Visitas</span>
+                          <div className="flex flex-1 items-center justify-between gap-2 bg-surface rounded-lg px-2 py-1.5 border border-white/5 focus-within:border-primary/50 transition-colors">
+                            <div className="flex items-center gap-1.5">
+                              <MapPin className="w-3.5 h-3.5 text-primary opacity-80" />
+                              <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Visitas</span>
+                            </div>
                             <input 
                               type="number" 
                               min="0" 
                               value={etapa.visitas}
                               onChange={e => update(etapa.id, { visitas: Math.max(0, +e.target.value) })}
-                              className="w-10 bg-transparent text-right text-sm font-black text-foreground focus:outline-none"
+                              className="w-12 bg-transparent text-right text-sm sm:text-base font-black text-foreground focus:outline-none"
                             />
                           </div>
 
                           {/* Inline Edit Horas */}
-                          <div className="flex flex-1 items-center gap-2 bg-surface rounded-lg px-2 py-1.5 border border-white/5 focus-within:border-primary/50 transition-colors">
-                            <Clock className="w-3.5 h-3.5 text-primary opacity-80" />
-                            <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest flex-1">Horas</span>
+                          <div className="flex flex-1 items-center justify-between gap-2 bg-surface rounded-lg px-2 py-1.5 border border-white/5 focus-within:border-primary/50 transition-colors">
+                            <div className="flex items-center gap-1.5">
+                              <Clock className="w-3.5 h-3.5 text-primary opacity-80" />
+                              <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Horas Extras</span>
+                            </div>
                             <input 
                               type="number" 
                               min="0" 
                               value={etapa.horas}
                               onChange={e => update(etapa.id, { horas: Math.max(0, +e.target.value) })}
-                              className="w-10 bg-transparent text-right text-sm font-black text-foreground focus:outline-none"
+                              className="w-12 bg-transparent text-right text-sm sm:text-base font-black text-foreground focus:outline-none"
                             />
                           </div>
                         </div>
