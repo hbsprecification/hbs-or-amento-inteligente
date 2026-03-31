@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { ChevronDown, ChevronRight, Clock, MapPin, CheckSquare, Square } from "lucide-react";
-import { EtapaServico, GRUPOS, calcularCustoEtapa, formatBRL } from "@/lib/orcamento";
+import { EtapaServico, GRUPOS, calcularCustoEtapa, formatBRL, type TemposPadrao } from "@/lib/orcamento";
 
 interface Props {
   etapas: EtapaServico[];
   custoHora: number;
+  temposPadrao: TemposPadrao;
   onUpdate: (etapas: EtapaServico[]) => void;
 }
 
-export default function ChecklistEtapas({ etapas, custoHora, onUpdate }: Props) {
+export default function ChecklistEtapas({ etapas, custoHora, temposPadrao, onUpdate }: Props) {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(
     GRUPOS.reduce((acc, g) => ({ ...acc, [g]: true }), {})
   );
@@ -56,21 +57,9 @@ export default function ChecklistEtapas({ etapas, custoHora, onUpdate }: Props) 
                       <div className="flex items-center gap-2 sm:gap-3 cursor-pointer" onClick={() => {
                         const ativa = !etapa.ativa;
                         const patch: Partial<EtapaServico> = { ativa };
+                        // Auto-preencher tempos padrão do painel de Configurações se estiver ativando
                         if (ativa && etapa.visitas === 0 && etapa.horas === 0) {
-                          const defaults: Record<string, { v?: number, h?: number }> = {
-                            'levantamento': { v: 1 },
-                            'arq': { h: 16 },
-                            'cortes-fachadas': { h: 8 },
-                            'situacao': { h: 4 },
-                            'calculos': { h: 4 },
-                            'pranchas': { h: 2 },
-                            'fracao-ideal': { h: 6 },
-                            'inst-convencao': { h: 12 },
-                            'certidao-tributos': { h: 4 },
-                            'protocolos': { v: 1 },
-                            'acompanhamento': { v: 1 }
-                          };
-                          const def = defaults[etapa.id] || { h: 4 };
+                          const def = temposPadrao[etapa.id] || { v: 0, h: 4 };
                           if (def.v) patch.visitas = def.v;
                           if (def.h) patch.horas = def.h;
                         }

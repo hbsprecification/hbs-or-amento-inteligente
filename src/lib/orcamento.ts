@@ -36,6 +36,24 @@ export const ETAPAS_PADRAO: Omit<EtapaServico, 'ativa' | 'visitas' | 'horas'>[] 
   { id: 'acompanhamento', nome: 'Acompanhamento do Processo', grupo: GRUPOS[3] },
 ];
 
+export interface TemposPadrao {
+  [id: string]: { v: number; h: number };
+}
+
+export const TEMPOS_PADRAO_INICIAIS: TemposPadrao = {
+  'levantamento': { v: 1, h: 0 },
+  'arq': { v: 0, h: 16 },
+  'cortes-fachadas': { v: 0, h: 8 },
+  'situacao': { v: 0, h: 4 },
+  'calculos': { v: 0, h: 4 },
+  'pranchas': { v: 0, h: 2 },
+  'fracao-ideal': { v: 0, h: 6 },
+  'inst-convencao': { v: 0, h: 12 },
+  'certidao-tributos': { v: 0, h: 4 },
+  'protocolos': { v: 1, h: 0 },
+  'acompanhamento': { v: 1, h: 0 }
+};
+
 // Custos fixos de protocolo (valores padrão)
 export interface CustosProtocolo {
   art: number;

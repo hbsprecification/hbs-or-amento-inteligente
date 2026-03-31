@@ -6,8 +6,11 @@ import ResumoFixo from "@/components/ResumoFixo";
 import GerarPropostaModal from "@/components/GerarPropostaModal";
 import { Switch } from "@/components/ui/switch";
 import {
-  EtapaServico, ETAPAS_PADRAO, calcularCustoHora, calcularCustoEtapa,
+  CUSTOS_FIXOS_PADRAO, CUSTOS_VARIAVEIS_PADRAO, INVESTIMENTOS_PADRAO,
+  HORAS_PRODUTIVAS_PADRAO, CUSTOS_PROTOCOLO_PADRAO, TEMPOS_PADRAO_INICIAIS,
+  calcularCustoHora, calcularCustoEtapa,
   calcularTotalProtocolos, formatBRL, calcularTotalHoras,
+  EtapaServico, ETAPAS_PADRAO,
   type ProtocolosSelecionados,
 } from "@/lib/orcamento";
 
@@ -96,7 +99,7 @@ export default function Index() {
         {/* Etapas */}
         <div className="glass-card p-3 flex-1 mb-8">
           <h2 className="text-xs font-semibold text-foreground mb-2">Serviços Técnicos</h2>
-          <ChecklistEtapas etapas={etapas} custoHora={custoHora} onUpdate={setEtapas} />
+          <ChecklistEtapas etapas={etapas} custoHora={custoHora} temposPadrao={config.temposPadrao} onUpdate={setEtapas} />
         </div>
       </main>
 
