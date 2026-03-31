@@ -1,33 +1,39 @@
 export interface EtapaServico {
   id: string;
   nome: string;
-  descricao: string;
+  grupo: string;
   ativa: boolean;
   visitas: number;
   horas: number;
 }
 
+export const GRUPOS = [
+  'Módulo Projeto',
+  'Módulo Documental',
+  'Módulo Jurídico',
+  'Módulo Trâmite',
+];
+
 export const ETAPAS_PADRAO: Omit<EtapaServico, 'ativa' | 'visitas' | 'horas'>[] = [
-  { 
-    id: 'projeto-paramétrico', 
-    nome: 'PROJETO PARAMÉTRICO', 
-    descricao: 'Arquitetônico, Cortes, Fachadas e Pranchas' 
-  },
-  { 
-    id: 'condominio-nbr', 
-    nome: 'CONDOMÍNIO E NBR', 
-    descricao: 'Memorial de Fração Ideal, Convenção e Quadro de Áreas' 
-  },
-  { 
-    id: 'regularizacao-doc', 
-    nome: 'REGULARIZAÇÃO DOCUMENTAL', 
-    descricao: 'Memorial Descritivo, Habite-se e Certidões' 
-  },
-  { 
-    id: 'gestao-tramite', 
-    nome: 'GESTÃO DE TRÂMITE', 
-    descricao: 'Protocolos e idas a órgãos públicos' 
-  },
+  // Módulo Projeto
+  { id: 'planta', nome: 'Planta Baixa', grupo: GRUPOS[0] },
+  { id: 'cortes', nome: 'Cortes', grupo: GRUPOS[0] },
+  { id: 'fachadas', nome: 'Fachadas', grupo: GRUPOS[0] },
+  { id: 'situacao', nome: 'Situação / Cobertura', grupo: GRUPOS[0] },
+
+  // Módulo Documental
+  { id: 'memoriais-desc', nome: 'Memorial Descritivo', grupo: GRUPOS[1] },
+  { id: 'habite-se', nome: 'Habite-se', grupo: GRUPOS[1] },
+  { id: 'certidoes', nome: 'Certidões', grupo: GRUPOS[1] },
+
+  // Módulo Jurídico
+  { id: 'fracao-ideal', nome: 'Fração Ideal', grupo: GRUPOS[2] },
+  { id: 'convencao', nome: 'Convenção de Condomínio', grupo: GRUPOS[2] },
+  { id: 'nbr12721', nome: 'Quadro de Áreas NBR 12721', grupo: GRUPOS[2] },
+
+  // Módulo Trâmite
+  { id: 'protocolos', nome: 'Protocolos em Órgãos', grupo: GRUPOS[3] },
+  { id: 'averbacao', nome: 'Acompanhamento e Averbações', grupo: GRUPOS[3] },
 ];
 
 // Custos fixos de protocolo (valores padrão)

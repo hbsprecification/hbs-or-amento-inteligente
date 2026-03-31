@@ -11,29 +11,41 @@ interface Props {
   onLucroChange: (v: number) => void;
   onImpostosChange: (v: number) => void;
   onComissaoChange: (v: number) => void;
+  children?: React.ReactNode;
 }
 
 export default function ResumoFixo({
   custoTecnico, custoProtocolos, totalHoras, lucro, impostos, comissao,
-  onLucroChange, onImpostosChange, onComissaoChange,
+  onLucroChange, onImpostosChange, onComissaoChange, children
 }: Props) {
   const resultado = calcularPrecoFinal(custoTecnico, custoProtocolos, lucro, impostos, comissao);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border/50 bg-card/95 backdrop-blur-xl">
-      <div className="max-w-5xl mx-auto px-3 py-2">
-        <div className="flex items-center gap-2 mb-1.5">
-          <PctInput icon={<Percent className="w-2.5 h-2.5" />} label="Lucro" value={lucro} onChange={onLucroChange} />
-          <PctInput icon={<Receipt className="w-2.5 h-2.5" />} label="Impostos" value={impostos} onChange={onImpostosChange} />
-          <PctInput icon={<Users className="w-2.5 h-2.5" />} label="Comissão" value={comissao} onChange={onComissaoChange} />
-        </div>
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/5 bg-background/80 backdrop-blur-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+      <div className="max-w-5xl mx-auto px-4 py-4">
+        <div className="flex flex-col md:flex-row md:items-center gap-4">
+          <div className="flex-1 space-y-4">
+            <div className="flex items-center gap-2">
+              <PctInput icon={<Percent className="w-3 h-3 text-primary" />} label="Lucro" value={lucro} onChange={onLucroChange} />
+              <PctInput icon={<Receipt className="w-3 h-3 text-primary" />} label="Impostos" value={impostos} onChange={onImpostosChange} />
+              <PctInput icon={<Users className="w-3 h-3 text-primary" />} label="Comissão" value={comissao} onChange={onComissaoChange} />
+            </div>
 
-        <div className="grid grid-cols-5 gap-1">
-          <Box label="Total de Horas" value={`${totalHoras}h`} cls="bg-primary/10 text-primary border border-primary/20" />
-          <Box label="Técnico" value={formatBRL(custoTecnico)} cls="bg-surface text-foreground" />
-          <Box label="Taxas" value={formatBRL(custoProtocolos)} cls="bg-warning/10 text-warning" />
-          <Box label="Comissão" value={formatBRL(resultado.comissao)} cls="bg-highlight/10 text-highlight" />
-          <Box label="Preço Final" value={formatBRL(resultado.precoVenda)} cls="gradient-primary text-primary-foreground glow-primary" hl />
+            <div className="grid grid-cols-4 gap-2">
+              <Box label="Total de Horas" value={`${totalHoras}h`} cls="bg-primary/10 text-primary border border-primary/20" />
+              <Box label="Custo Técnico" value={formatBRL(custoTecnico)} cls="bg-surface text-foreground border border-white/5" />
+              <Box label="Taxas" value={formatBRL(custoProtocolos)} cls="bg-warning/10 text-warning border border-warning/20" />
+              <Box label="Comissão" value={formatBRL(resultado.comissao)} cls="bg-highlight/10 text-highlight border border-highlight/20" />
+            </div>
+          </div>
+          
+          <div className="md:w-64 shrink-0 flex flex-col justify-end">
+            <div className="flex justify-between items-end mb-2 px-1">
+              <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Preço Final</span>
+              <span className="text-2xl font-black text-foreground drop-shadow-md">{formatBRL(resultado.precoVenda)}</span>
+            </div>
+            {children}
+          </div>
         </div>
       </div>
     </div>
@@ -42,22 +54,22 @@ export default function ResumoFixo({
 
 function PctInput({ icon, label, value, onChange }: { icon: React.ReactNode; label: string; value: number; onChange: (v: number) => void }) {
   return (
-    <div className="flex-1 flex items-center gap-1 bg-surface rounded px-2 py-1">
+    <div className="flex-1 flex items-center gap-2 bg-surface/50 border border-white/5 rounded-xl px-3 py-2 focus-within:border-primary/50 transition-colors">
       {icon}
-      <span className="text-[8px] text-muted-foreground uppercase hidden sm:inline">{label}</span>
+      <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest hidden sm:inline">{label}</span>
       <input type="number" min={0} step={5} value={value}
         onChange={e => onChange(Math.max(0, +e.target.value))}
-        className="w-9 bg-transparent text-foreground text-[11px] font-bold text-right focus:outline-none" />
-      <span className="text-muted-foreground text-[9px]">%</span>
+        className="w-10 bg-transparent text-foreground text-xs font-black text-right focus:outline-none ml-auto" />
+      <span className="text-muted-foreground text-[10px] font-bold">%</span>
     </div>
   );
 }
 
-function Box({ label, value, cls, hl }: { label: string; value: string; cls: string; hl?: boolean }) {
+function Box({ label, value, cls }: { label: string; value: string; cls: string }) {
   return (
-    <div className={`rounded px-1 py-1.5 text-center ${cls}`}>
-      <p className={`text-[7px] uppercase tracking-wide ${hl ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>{label}</p>
-      <p className="text-[10px] sm:text-xs font-extrabold truncate">{value}</p>
+    <div className={`rounded-xl px-3 py-2 text-left ${cls}`}>
+      <p className={`text-[8px] uppercase font-bold tracking-widest text-muted-foreground mb-0.5`}>{label}</p>
+      <p className="text-sm font-black truncate">{value}</p>
     </div>
   );
 }

@@ -64,11 +64,6 @@ export default function Index() {
               <RotateCcw className="w-3.5 h-3.5" /> Zerar
             </button>
             <ConfiguracoesModal config={config} onSave={setConfig} />
-            <GerarPropostaModal
-              etapas={etapas} custoHora={custoHora}
-              protocolos={protocolos} custosProtocolo={config.protocolo}
-              lucro={lucro} impostos={impostos} comissao={comissao}
-            />
           </div>
         </div>
       </header>
@@ -111,7 +106,13 @@ export default function Index() {
         totalHoras={totalHoras}
         lucro={lucro} impostos={impostos} comissao={comissao}
         onLucroChange={setLucro} onImpostosChange={setImpostos} onComissaoChange={setComissao}
-      />
+      >
+        <GerarPropostaModal
+          etapas={etapas} custoHora={custoHora}
+          protocolos={protocolos} custosProtocolo={config.protocolo}
+          lucro={lucro} impostos={impostos} comissao={comissao}
+        />
+      </ResumoFixo>
     </div>
   );
 }

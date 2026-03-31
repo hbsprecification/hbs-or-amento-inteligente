@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,34 +6,45 @@
 
 @layer base {
   :root {
-    --background: 240 10% 4%;
+    /* Superfície Suave Grafite */
+    --background: 0 0% 10%;
     --foreground: 0 0% 98%;
-    --card: 240 10% 6%;
+    --card: 0 0% 13%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 4%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 98%;
-    --primary: 158 80% 40%;
-    --primary-foreground: 144 100% 98%;
-    --secondary: 240 4% 16%;
+    
+    /* Terracota HBS */
+    --primary: 13 53% 50%;
+    --primary-foreground: 0 0% 98%;
+    
+    /* Marrom Profundo */
+    --secondary: 25 32% 18%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 4% 12%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 158 80% 40%;
+    
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+    
+    --accent: 25 32% 18%;
     --accent-foreground: 0 0% 98%;
+    
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 6% 15%;
-    --input: 240 6% 15%;
-    --ring: 158 80% 40%;
-    --radius: 1rem;
+    
+    --border: 0 0% 20%;
+    --input: 0 0% 18%;
+    --ring: 13 53% 50%;
+    --radius: 0.75rem;
 
     --success: 158 80% 40%;
-    --success-foreground: 240 10% 4%;
+    --success-foreground: 0 0% 10%;
     --warning: 45 93% 47%;
-    --warning-foreground: 240 10% 4%;
-    --highlight: 180 100% 45%;
-    --highlight-foreground: 240 10% 4%;
-    --surface: 240 10% 8%;
+    --warning-foreground: 0 0% 10%;
+    /* Highlight em um Laranja Vibrante */
+    --highlight: 20 80% 60%;
+    --highlight-foreground: 0 0% 10%;
+    
+    --surface: 0 0% 15%;
     --surface-foreground: 0 0% 98%;
   }
 }
@@ -44,30 +55,31 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     background-image: 
-      radial-gradient(at 0% 0%, hsla(var(--primary) / 0.05) 0, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(var(--highlight) / 0.05) 0, transparent 50%);
+      radial-gradient(at 0% 0%, hsla(var(--secondary) / 0.15) 0, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(var(--primary) / 0.1) 0, transparent 50%);
     background-attachment: fixed;
   }
 }
 
 @layer utilities {
   .glass-card {
-    @apply bg-card/60 backdrop-blur-2xl border border-white/5 rounded-2xl shadow-2xl;
+    @apply bg-card/80 backdrop-blur-xl border border-white/5 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.3)];
   }
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--highlight) / 0.8));
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--highlight)));
   }
   .text-gradient {
     background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--highlight)));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
   }
   .glow-primary {
-    box-shadow: 0 0 25px hsl(var(--primary) / 0.4), 0 0 50px hsl(var(--primary) / 0.1);
+    box-shadow: 0 0 25px hsla(var(--primary) / 0.3), 0 0 50px hsla(var(--highlight) / 0.15);
   }
   .glass-header {
-    @apply bg-background/40 backdrop-blur-md border-b border-white/5 sticky top-0 z-50;
+    @apply bg-background/60 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50;
   }
 }

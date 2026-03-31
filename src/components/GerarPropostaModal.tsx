@@ -36,10 +36,9 @@ export default function GerarPropostaModal({ etapas, custoHora, protocolos, cust
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" className="gap-1.5 text-xs">
-          <FileText className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Proposta</span>
-          <span className="sm:hidden">PDF</span>
+        <Button className="w-full h-12 mt-1 bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_4px_15px_rgba(192,90,62,0.4)] transition-all font-black uppercase tracking-widest text-[10px] sm:text-xs">
+          <FileText className="w-4 h-4 mr-1.5" />
+          Gerar Proposta Profissional
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm bg-card border-border">
