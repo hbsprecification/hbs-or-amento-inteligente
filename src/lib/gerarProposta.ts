@@ -36,9 +36,9 @@ export async function gerarPropostaPDF(
   } catch {}
 
   if (logoImg) doc.addImage(logoImg, "PNG", 15, 8, 30, 30);
-  doc.setFontSize(20);
+  doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
-  doc.text("PROPOSTA DE SERVIÇO", 55, 22);
+  doc.text("ORÇAMENTO PARA REGULARIZAÇÃO DE IMÓVEL", 55, 22);
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
   doc.text("HBS Soluções em Engenharia", 55, 29);
@@ -49,12 +49,35 @@ export async function gerarPropostaPDF(
 
   let y = 52;
   doc.setFontSize(11);
-  doc.text(`Cliente: ${nomeCliente || 'A definir'}`, 15, y);
+  doc.setFont("helvetica", "bold");
+  doc.text(`Cliente:`, 15, y);
+  doc.setFont("helvetica", "normal");
+  doc.text(`${nomeCliente || 'A definir'}`, 32, y);
   y += 6;
-  if (localObra) { doc.text(`Local: ${localObra}`, 15, y); y += 6; }
-  doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 15, y);
+  
+  if (localObra) { 
+    doc.setFont("helvetica", "bold");
+    doc.text(`Endereço do Objeto:`, 15, y); 
+    doc.setFont("helvetica", "normal");
+    doc.text(`${localObra}`, 55, y); 
+    y += 6; 
+  }
+  
+  doc.setFont("helvetica", "bold");
+  doc.text(`Data:`, 15, y);
+  doc.setFont("helvetica", "normal");
+  doc.text(`${new Date().toLocaleDateString('pt-BR')}`, 27, y);
+  
+  doc.setFont("helvetica", "bold");
   doc.text(`Validade: 30 dias`, 120, y);
-  if (prazo) { y += 6; doc.text(`Prazo estimado: ${prazo} dias`, 15, y); }
+  
+  if (prazo) { 
+    y += 6; 
+    doc.setFont("helvetica", "bold");
+    doc.text(`Prazo estimado:`, 15, y); 
+    doc.setFont("helvetica", "normal");
+    doc.text(`${prazo} dias`, 48, y); 
+  }
   y += 10;
 
   // Módulos de Serviço
@@ -114,14 +137,32 @@ export async function gerarPropostaPDF(
   // Pagamento
   const payY = y + 17;
   doc.setFontSize(10);
+  doc.setFont("helvetica", "bold");
+  doc.text("Condições Gerais de Pagamento:", 15, payY);
+  
   doc.setFont("helvetica", "normal");
-  doc.text("Condições de Pagamento:", 15, payY);
-  doc.text("• 50% na assinatura do contrato (PIX)", 20, payY + 7);
-  doc.text("• 50% na conclusão dos serviços (PIX)", 20, payY + 13);
+  const p50 = formatBRL(resultado.precoVenda * 0.5);
+  const p20 = formatBRL(resultado.precoVenda * 0.2);
+  const p10 = formatBRL(resultado.precoVenda * 0.1);
+
+  doc.text(`• 50% na vistoria / assinatura do contrato (${p50})`, 20, payY + 7);
+  doc.text(`• 20% no protocolo de licença (${p20})`, 20, payY + 13);
+  doc.text(`• 20% na emissão do Habite-se (${p20})`, 20, payY + 19);
+  doc.text(`• 10% na Averbação (${p10})`, 20, payY + 25);
+
+  y = payY + 35;
+
+  // Notas Fixas (Rodapé)
+  doc.setFontSize(8);
+  doc.setFont("helvetica", "italic");
+  doc.setTextColor(100);
+  const notasText = "Notas Importantes: Taxas de prefeitura, impostos incidentes sobre a obra, emolumentos de cartório e taxas de emissão de ART/RRT não estão inclusos nestes honorários e são de exclusiva responsabilidade do contratante.";
+  const splitNotas = doc.splitTextToSize(notasText, 180);
+  doc.text(splitNotas, 15, y);
 
   doc.setFontSize(8);
-  doc.setTextColor(120);
-  doc.text("Proposta válida por 30 dias. | HBS Soluções em Engenharia", 15, 280);
+  doc.setTextColor(150);
+  doc.text("Proposta válida por 30 dias. | HBS Soluções em Engenharia", 15, 285);
 
   doc.save(`proposta-hbs-${Date.now()}.pdf`);
 }
