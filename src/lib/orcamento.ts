@@ -17,17 +17,15 @@ export const GRUPOS = [
 export const ETAPAS_PADRAO: Omit<EtapaServico, 'ativa' | 'visitas' | 'horas'>[] = [
   // Módulo Projeto
   { id: 'levantamento', nome: 'Levantamento Cadastral', grupo: GRUPOS[0] },
-  { id: 'arq', nome: 'Projeto Arquitetônico', grupo: GRUPOS[0] },
-  { id: 'cortes-fachadas', nome: 'Cortes e Fachadas', grupo: GRUPOS[0] },
+  { id: 'arq', nome: 'Elaboração de Projeto Legal (Plantas, Cortes e Fachadas)', grupo: GRUPOS[0] },
+  { id: 'cortes-fachadas', nome: 'Cortes e Fachadas (Aprovação)', grupo: GRUPOS[0] },
   { id: 'situacao', nome: 'Planta de Situação', grupo: GRUPOS[0] },
   { id: 'calculos', nome: 'Cálculo para Aprovação', grupo: GRUPOS[0] },
   { id: 'pranchas', nome: 'Pranchas para Impressão', grupo: GRUPOS[0] },
 
   // Módulo Documental
-  { id: 'memoriais-desc', nome: 'Memorial Descritivo', grupo: GRUPOS[1] },
-  { id: 'fracao-ideal', nome: 'Fração Ideal', grupo: GRUPOS[1] },
+  { id: 'fracao-ideal', nome: 'Memorial Descritivo + Fração Ideal', grupo: GRUPOS[1] },
   { id: 'habite-se', nome: 'Habite-se', grupo: GRUPOS[1] },
-  { id: 'certidoes', nome: 'Certidões', grupo: GRUPOS[1] },
 
   // Módulo Jurídico
   { id: 'inst-convencao', nome: 'Instituição e Convenção de Condomínio', grupo: GRUPOS[2] },

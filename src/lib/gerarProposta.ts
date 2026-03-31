@@ -14,6 +14,7 @@ export async function gerarPropostaPDF(
   impostos: number,
   comissao: number,
   nomeCliente: string,
+  objetivo?: string,
   localObra?: string,
   prazo?: number
 ) {
@@ -55,6 +56,14 @@ export async function gerarPropostaPDF(
   doc.text(`${nomeCliente || 'A definir'}`, 32, y);
   y += 6;
   
+  if (objetivo) { 
+    doc.setFont("helvetica", "bold");
+    doc.text(`Objetivo do Projeto:`, 15, y); 
+    doc.setFont("helvetica", "normal");
+    doc.text(`${objetivo}`, 55, y); 
+    y += 6; 
+  }
+  
   if (localObra) { 
     doc.setFont("helvetica", "bold");
     doc.text(`Endereço do Objeto:`, 15, y); 
@@ -89,19 +98,17 @@ export async function gerarPropostaPDF(
 
     autoTable(doc, {
       startY: y,
-      head: [["Módulo", "Escopo Sugerido", "Total Dedicação"]],
+      head: [["Módulo Principal", "Escopo de Serviço"]],
       body: ativas.map(e => [
-        e.nome, 
-        e.descricao, 
-        `${(e.visitas * 8) + e.horas}h`
+        e.grupo, 
+        e.nome
       ]),
       theme: "grid",
-      headStyles: { fillColor: [40, 60, 50], textColor: 255, fontSize: 9 },
-      styles: { fontSize: 8, cellPadding: 3 },
+      headStyles: { fillColor: [40, 60, 50], textColor: 255, fontSize: 10 },
+      styles: { fontSize: 9, cellPadding: 4, textColor: 60 },
       columnStyles: {
-        0: { cellWidth: 40, fontStyle: 'bold' },
-        1: { cellWidth: 'auto' },
-        2: { cellWidth: 30, halign: 'center' }
+        0: { cellWidth: 50, fontStyle: 'bold', textColor: 30 },
+        1: { cellWidth: 'auto' }
       },
       margin: { left: 15, right: 15 },
     });
@@ -130,39 +137,53 @@ export async function gerarPropostaPDF(
   }
 
   // Total
-  doc.setFontSize(14);
+  y += 8;
+  doc.setFontSize(15);
   doc.setFont("helvetica", "bold");
-  doc.text(`VALOR TOTAL: ${formatBRL(resultado.precoVenda)}`, 15, y + 5);
+  doc.setTextColor(30);
+  doc.text(`VALOR TOTAL DO INVESTIMENTO: ${formatBRL(resultado.precoVenda)}`, 15, y + 5);
 
-  // Pagamento
-  const payY = y + 17;
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "bold");
-  doc.text("Condições Gerais de Pagamento:", 15, payY);
+  // Pagamento - Solid Terracota Box
+  y += 15;
+  const payY = y;
+  doc.setFillColor(192, 90, 62); // Hex #C05A3E
+  doc.rect(15, payY, 180, 38, 'F');
   
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(11);
+  doc.setFont("helvetica", "bold");
+  doc.text("CONDIÇÕES DE PAGAMENTO:", 20, payY + 8);
+  
+  doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
   const p50 = formatBRL(resultado.precoVenda * 0.5);
   const p20 = formatBRL(resultado.precoVenda * 0.2);
   const p10 = formatBRL(resultado.precoVenda * 0.1);
 
-  doc.text(`• 50% na vistoria / assinatura do contrato (${p50})`, 20, payY + 7);
-  doc.text(`• 20% no protocolo de licença (${p20})`, 20, payY + 13);
-  doc.text(`• 20% na emissão do Habite-se (${p20})`, 20, payY + 19);
-  doc.text(`• 10% na Averbação (${p10})`, 20, payY + 25);
+  doc.text(`• 50% na vistoria / assinatura do contrato (${p50})`, 20, payY + 16);
+  doc.text(`• 20% no protocolo de licença (${p20})`, 20, payY + 23);
+  doc.text(`• 20% na emissão do Habite-se (${p20})`, 20, payY + 30);
+  doc.text(`• 10% na Averbação e Finalização (${p10})`, 20, payY + 37);
 
-  y = payY + 35;
+  y = payY + 50;
 
-  // Notas Fixas (Rodapé)
-  doc.setFontSize(8);
-  doc.setFont("helvetica", "italic");
-  doc.setTextColor(100);
-  const notasText = "Notas Importantes: Taxas de prefeitura, impostos incidentes sobre a obra, emolumentos de cartório e taxas de emissão de ART/RRT não estão inclusos nestes honorários e são de exclusiva responsabilidade do contratante.";
+  // Cláusulas de Segurança Restritivas
+  doc.setTextColor(200, 50, 50);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "bold");
+  doc.text("NÃO INCLUSO NESTE ORÇAMENTO (CUSTOS DO CLIENTE):", 15, y);
+  
+  y += 6;
+  doc.setTextColor(80);
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  const notasText = "Taxas e emolumentos de prefeitura, impostos incidentes sobre a obra/regularização, custas cartoriais, despachos judiciais, multas anteriores, correios e taxas obrigatórias de emissão de guias ART/RRT não compõem estes honorários operacionais e deverão ser custeados exclusivamente pelo próprio contratante.";
   const splitNotas = doc.splitTextToSize(notasText, 180);
   doc.text(splitNotas, 15, y);
 
   doc.setFontSize(8);
   doc.setTextColor(150);
-  doc.text("Proposta válida por 30 dias. | HBS Soluções em Engenharia", 15, 285);
+  doc.text("Documento HBS Soluções em Engenharia | Proposta válida por 30 dias a partir da data de emissão.", 15, 285);
 
   doc.save(`proposta-hbs-${Date.now()}.pdf`);
 }

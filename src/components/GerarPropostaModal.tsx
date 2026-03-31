@@ -23,13 +23,14 @@ interface Props {
 export default function GerarPropostaModal({ etapas, custoHora, protocolos, custosProtocolo, lucro, impostos, comissao }: Props) {
   const [open, setOpen] = useState(false);
   const [nomeCliente, setNomeCliente] = useState("");
+  const [objetivo, setObjetivo] = useState("");
   const [localObra, setLocalObra] = useState("");
   const [prazo, setPrazo] = useState(30);
 
   const ativas = etapas.filter(e => e.ativa).length;
 
   const handleGerar = () => {
-    gerarPropostaPDF(etapas, custoHora, protocolos, custosProtocolo, lucro, impostos, comissao, nomeCliente, localObra, prazo);
+    gerarPropostaPDF(etapas, custoHora, protocolos, custosProtocolo, lucro, impostos, comissao, nomeCliente, objetivo, localObra, prazo);
     setOpen(false);
   };
 
@@ -53,11 +54,15 @@ export default function GerarPropostaModal({ etapas, custoHora, protocolos, cust
         </DialogHeader>
 
         <div className="space-y-2 mt-1">
-          <Field icon={<User className="w-3 h-3" />} label="Cliente / Obra">
+          <Field icon={<User className="w-3 h-3" />} label="Cliente">
             <input type="text" value={nomeCliente} onChange={e => setNomeCliente(e.target.value)}
               placeholder="Ex: João da Silva" className="w-full bg-background border border-border rounded px-2 py-1.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ring" />
           </Field>
-          <Field icon={<MapPin className="w-3 h-3" />} label="Local">
+          <Field icon={<FileText className="w-3 h-3" />} label="Objetivo do Projeto">
+            <input type="text" value={objetivo} onChange={e => setObjetivo(e.target.value)}
+              placeholder="Ex: Regularização para Venda / Financiamento" className="w-full bg-background border border-border rounded px-2 py-1.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ring" />
+          </Field>
+          <Field icon={<MapPin className="w-3 h-3" />} label="Endereço do Objeto">
             <input type="text" value={localObra} onChange={e => setLocalObra(e.target.value)}
               placeholder="Ex: Rua das Flores, 123" className="w-full bg-background border border-border rounded px-2 py-1.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ring" />
           </Field>
